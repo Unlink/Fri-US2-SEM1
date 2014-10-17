@@ -47,7 +47,7 @@ public class Exporter {
         this.aOutputDirectory = outputDirectory;
     }
     
-    public void exportuj(ExportnySystem paSystem) {
+    public void exportuj(ExportnySystem paSystem) throws IOException {
         //Vytvorenie súborov
         try (
             BufferedWriter brSklady = new BufferedWriter(new FileWriter(new File(aOutputDirectory, SKLADYCSV)));
@@ -55,8 +55,6 @@ public class Exporter {
             BufferedWriter brTovary = new BufferedWriter(new FileWriter(new File(aOutputDirectory, TOVARYCSV)));
             BufferedWriter brExpedice = new BufferedWriter(new FileWriter(new File(aOutputDirectory, EXPEDICIECSV)))
         ) {
-            
-        } catch (IOException ex) {
             
         }
     }
