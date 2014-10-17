@@ -10,7 +10,7 @@ package sk.uniza.fri.duracik2.exportnySystem;
  *
  * @author Unlink
  */
-public class Odberatel extends AMiesto {
+public class Odberatel extends AMiesto implements IToCSV {
     private String aId;
     private Velkosklad aSklad;
 
@@ -38,6 +38,11 @@ public class Odberatel extends AMiesto {
 
     @Override
     public int compareTo(AMiesto o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String toCSV() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

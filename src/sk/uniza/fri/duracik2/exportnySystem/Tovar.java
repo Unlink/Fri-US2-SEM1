@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Unlink
  */
-public class Tovar implements Comparable<Tovar> {
+public class Tovar implements Comparable<Tovar>, IToCSV {
 
     private long aVyrobneCislo;
     private String aEanKod;
@@ -63,6 +63,11 @@ public class Tovar implements Comparable<Tovar> {
     @Override
     public int compareTo(Tovar o) {
         return (aVyrobneCislo == o.aVyrobneCislo) ? 0 : (aVyrobneCislo > o.aVyrobneCislo) ? 1 : -1;
+    }
+
+    @Override
+    public String toCSV() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

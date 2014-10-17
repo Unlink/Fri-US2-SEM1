@@ -12,7 +12,7 @@ import java.util.Date;
  *
  * @author Unlink
  */
-public class Expedicia implements Comparable<Expedicia> {
+public class Expedicia implements Comparable<Expedicia>, IToCSV {
 
     private static long aLastId = 1;
     
@@ -84,6 +84,11 @@ public class Expedicia implements Comparable<Expedicia> {
     @Override
     public int compareTo(Expedicia o) {
         return aTovar.compareTo(o.getTovar());
+    }
+
+    @Override
+    public String toCSV() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

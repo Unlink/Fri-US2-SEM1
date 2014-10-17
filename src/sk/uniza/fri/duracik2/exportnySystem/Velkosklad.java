@@ -17,7 +17,7 @@ import sk.uniza.fri.duracik2.tree.TreeIndexer;
  *
  * @author Unlink
  */
-public class Velkosklad extends AMiesto {
+public class Velkosklad extends AMiesto implements IToCSV {
     private static final TreeIndexer<Tovar> aTovarIndexerID;
     private static final TreeIndexer<Tovar> aTovarIndexerEan;
     private static final TreeIndexer<Tovar> aTovarIndexerDatum;
@@ -281,6 +281,11 @@ public class Velkosklad extends AMiesto {
                     return cmp1;
             }
         };
+    }
+
+    @Override
+    public String toCSV() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
