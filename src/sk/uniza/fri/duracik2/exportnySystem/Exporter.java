@@ -57,7 +57,7 @@ public class Exporter {
         ) {
             
         } catch (IOException ex) {
-            Logger.getLogger(Exporter.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
 

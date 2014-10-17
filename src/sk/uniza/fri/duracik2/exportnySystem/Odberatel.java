@@ -20,8 +20,6 @@ public class Odberatel extends AMiesto implements IToCSV {
         this.aSklad = aSklad;
     }
 
-    
-    
     // <editor-fold defaultstate="collapsed" desc="Gettery a settery">
     public String getId() {
         return aId;
