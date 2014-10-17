@@ -87,8 +87,8 @@ public class Expedicia implements Comparable<Expedicia>, IToCSV {
     }
 
     @Override
-    public String toCSV() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object[] toCsvData() {
+        return new Object[]{aId, aTovar, aEvcPrepravcu, aDatZaciatku, aDatKonca, aPredchadzajuca, aZdroj, aCiel};
     }
     
 }

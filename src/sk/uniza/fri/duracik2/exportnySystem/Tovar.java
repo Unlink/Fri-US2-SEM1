@@ -66,8 +66,8 @@ public class Tovar implements Comparable<Tovar>, IToCSV {
     }
 
     @Override
-    public String toCSV() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object[] toCsvData() {
+        return new Object[]{aVyrobneCislo, aEanKod, aDatumVyroby, aDatumSpotreby, aCena, aAktualnaLokacia, aPosExpZaznam};
     }
 
 }

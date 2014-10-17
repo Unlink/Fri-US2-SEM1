@@ -11,5 +11,5 @@ package sk.uniza.fri.duracik2.exportnySystem;
  * @author Unlink
  */
 public interface IToCSV {
-    public String toCSV();
+    public Object[] toCsvData();
 }
