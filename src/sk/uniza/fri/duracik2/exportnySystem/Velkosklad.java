@@ -260,7 +260,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
                     id = (String) params[0];
                 else 
                     return 0;
-                return id.compareTo(e1.getNazov());
+                return id.compareTo(e1.getId());
             }
         };
         aExpedicieIndexer = new TreeIndexer<Expedicia>() {
@@ -270,8 +270,8 @@ public class Velkosklad extends AMiesto implements IToCSV {
                 //int cmp2 = 0;
                 if (params[0] instanceof Expedicia) {
                     Expedicia e2 = (Expedicia) params[0];
-                    cmp1 = Long.compare(e2.getTovar().getVyrobneCislo(), e1.getTovar().getVyrobneCislo());
-                    //cmp2 = Long.compare(e2.getId(), e1.getId());
+                    //cmp1 = Long.compare(e2.getTovar().getVyrobneCislo(), e1.getTovar().getVyrobneCislo());
+                    cmp1 = Long.compare(e2.getId(), e1.getId());
                 }
                 else {
                     if (params[0] instanceof Number)

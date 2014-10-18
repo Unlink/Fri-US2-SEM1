@@ -83,7 +83,7 @@ public class Expedicia implements Comparable<Expedicia>, IToCSV {
     
     @Override
     public int compareTo(Expedicia o) {
-        return aTovar.compareTo(o.getTovar());
+        return Long.compare(aId, o.aId);
     }
 
     @Override

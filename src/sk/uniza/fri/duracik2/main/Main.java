@@ -64,8 +64,9 @@ public class Main {
         s.vyložTovar(1);
         s.expedujTovarDoVeľkoskladu(3, 1, 2, STD("15.10.2014"), "EVC2");
         s.vyložTovar(1);
-        s.expedujTovarKOdberateľovi(2, 1, "1", STD("15.10.2014"), "EVC3");
+        s.expedujTovarKOdberateľovi(2, 1, "3", STD("15.10.2014"), "EVC3");
         s.vyložTovar(1);
+        s.zrusOdberatela(2, "3");
         
         Exporter export = new Exporter(new File("C:\\Users\\Unlink\\Desktop\\ExportedData"));
         try {
