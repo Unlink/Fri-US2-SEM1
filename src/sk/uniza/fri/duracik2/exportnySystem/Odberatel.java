@@ -36,7 +36,7 @@ public class Odberatel extends AMiesto implements IToCSV {
 
     @Override
     public int compareTo(AMiesto o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ((Odberatel) o).aId.compareTo(aId);
     }
 
     @Override

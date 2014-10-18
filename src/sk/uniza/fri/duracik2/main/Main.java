@@ -53,12 +53,19 @@ public class Main {
         s.pridajOdberatela(2, "3", "3. Odberatel", "Adresa3");
         s.pridajOdberatela(3, "4", "4. Odberatel", "Adresa4");
         
-        s.naskladniTovar(new Tovar(1, "AA", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
-        s.naskladniTovar(new Tovar(2, "AA", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
-        s.naskladniTovar(new Tovar(3, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
-        s.naskladniTovar(new Tovar(4, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
-        s.naskladniTovar(new Tovar(5, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
-        s.naskladniTovar(new Tovar(6, "CC", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
+        s.naskladniTovar(new Tovar(1L, "AA", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
+        s.naskladniTovar(new Tovar(2L, "AA", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
+        s.naskladniTovar(new Tovar(3L, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
+        s.naskladniTovar(new Tovar(4L, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
+        s.naskladniTovar(new Tovar(5L, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
+        s.naskladniTovar(new Tovar(6L, "CC", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
+        
+        s.expedujTovarDoVeľkoskladu(1, 1, 3, STD("20.10.2014"), "EVC1");
+        s.vyložTovar(1);
+        s.expedujTovarDoVeľkoskladu(3, 1, 2, STD("15.10.2014"), "EVC2");
+        s.vyložTovar(1);
+        s.expedujTovarKOdberateľovi(2, 1, "1", STD("15.10.2014"), "EVC3");
+        s.vyložTovar(1);
         
         Exporter export = new Exporter(new File("C:\\Users\\Unlink\\Desktop\\ExportedData"));
         try {

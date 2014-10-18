@@ -42,6 +42,7 @@ public class Exporter {
         aOdberatelia = new RBTree<>();
         aSklady = new RBTree<>();
         aExpedicie = new RBTree<>();
+        fronta = new LinkedList<>();
     }
 
     public File getOutputDirectory() {
@@ -58,6 +59,15 @@ public class Exporter {
         while (it.hasNext()) {
             Velkosklad sklad = it.next();
             pridajNaExport(sklad);
+            Iterator<Odberatel> it2 = sklad.dajOdberatelov();
+            while (it2.hasNext())
+                pridajNaExport(it2.next());
+        }
+        
+        Iterator<Tovar> it3 = paSystem.dajZoznamTovatov();
+        while (it3.hasNext()) {
+            while (it3.hasNext())
+                pridajNaExport(it3.next());
         }
         doExport();
     }
@@ -108,6 +118,9 @@ public class Exporter {
         }
         else if (attr instanceof Date) {
             return ((Date) attr).getTime() + "";
+        }
+        else if (attr == null) {
+            return "";
         }
         else {
             return attr.toString();

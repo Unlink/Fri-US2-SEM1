@@ -143,7 +143,7 @@ public class ExportnySystem {
      * @param evcVozidla
      * @return 
      */
-    public boolean expedujTovarDoVeľkoskladu(int idSkladu, int idTovaru, int idCielovehoSkladu, Date datumPrichodu, String evcVozidla) {
+    public boolean expedujTovarDoVeľkoskladu(int idSkladu, long idTovaru, int idCielovehoSkladu, Date datumPrichodu, String evcVozidla) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return false;
         Velkosklad cielovySklad = vyhladajSklad(idCielovehoSkladu);
@@ -161,7 +161,7 @@ public class ExportnySystem {
      * @param evcVozidla
      * @return 
      */
-    public boolean expedujTovarKOdberateľovi(int idSkladu, int idTovaru, String idOdberatela, Date datumPrichodu, String evcVozidla) {
+    public boolean expedujTovarKOdberateľovi(int idSkladu, long idTovaru, String idOdberatela, Date datumPrichodu, String evcVozidla) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return false;
         return sklad.exportujTovarKOdberatelovi(idTovaru, idOdberatela, datumPrichodu, evcVozidla);
@@ -174,7 +174,7 @@ public class ExportnySystem {
      * @param idTovaru
      * @return 
      */
-    public boolean vyložTovar(int idTovaru) {
+    public boolean vyložTovar(long idTovaru) {
         Tovar tovar = aZoznamTovarov.findByParams(idTovaru);
         if (tovar == null || tovar.getPosExpZaznam() == null) return false;
         Velkosklad sklad = (Velkosklad) tovar.getPosExpZaznam().getZdroj();

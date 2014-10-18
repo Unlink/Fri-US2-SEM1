@@ -78,4 +78,9 @@ public class Tovar implements Comparable<Tovar>, IToCSV {
         return new Object[]{aVyrobneCislo, aEanKod, aDatumVyroby, aDatumSpotreby, aCena, aAktualnaLokacia, aPosExpZaznam};
     }
 
+    @Override
+    public String toString() {
+        return ""+aVyrobneCislo;
+    }
+
 }

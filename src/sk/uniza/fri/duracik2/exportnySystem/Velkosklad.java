@@ -36,6 +36,11 @@ public class Velkosklad extends AMiesto implements IToCSV {
     public Velkosklad(int aId, String aNazov, String aAdresa) {
         super(aNazov, aAdresa);
         this.aId = aId;
+        aTovaryById = new RBTree<>(aTovarIndexerID);
+        aTovaryByEan = new RBTree<>(aTovarIndexerEan);
+        aTovaryByDatum = new RBTree<>(aTovarIndexerDatum);
+        aOdberatelia = new RBTree<>(aOdberatelIndexer);
+        aExpedovane = new RBTree<>(aExpedicieIndexer);
     }
     
     // <editor-fold defaultstate="collapsed" desc="Gettery a settery">
@@ -88,7 +93,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
         return aOdberatelia.findByParams(paIdOdberatela);
     }
     
-    public boolean exportujTovar(int paIdTovaru, AMiesto ciel, Date datumPrichodu, String evcVozidla) {
+    public boolean exportujTovar(long paIdTovaru, AMiesto ciel, Date datumPrichodu, String evcVozidla) {
         Tovar tovar = aTovaryById.findByParams(paIdTovaru);
         if (tovar == null)
             return false;
@@ -102,7 +107,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
         return true;
     }
     
-    public boolean exportujTovarKOdberatelovi(int paIdTovaru, String paIdOdberatela, Date paDatumPrichodu, String paEvcVozidla) {
+    public boolean exportujTovarKOdberatelovi(long paIdTovaru, String paIdOdberatela, Date paDatumPrichodu, String paEvcVozidla) {
         Odberatel odberatel = aOdberatelia.findByParams(paIdOdberatela);
         if (odberatel == null) return false;
         return exportujTovar(paIdTovaru, odberatel, paDatumPrichodu, paEvcVozidla);
@@ -184,7 +189,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
                 long e2id = 0;
                 if (params[0] instanceof Tovar)
                     e2id = ((Tovar)params[0]).getVyrobneCislo();
-                else if (params[0] instanceof Long)
+                else if (params[0] instanceof Number)
                     e2id = (long) params[0];
                 else 
                     return 0;
@@ -208,7 +213,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
                         cmp1 = (-1)*e1.getEanKod().compareTo((String) params[0]);
                     if (params.length > 1 && params[1] instanceof Date)
                         cmp2 = (-1)*e1.getDatumSpotreby().compareTo((Date) params[1]);
-                    if (params.length > 2 && params[2] instanceof Long)
+                    if (params.length > 2 && params[2] instanceof Number)
                         cmp3 = Long.compare((long) params[2], e1.getVyrobneCislo());
                 }
                 
@@ -269,7 +274,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
                     //cmp2 = Long.compare(e2.getId(), e1.getId());
                 }
                 else {
-                    if (params[0] instanceof Long)
+                    if (params[0] instanceof Number)
                         cmp1 = Long.compare((long) params[0], e1.getTovar().getVyrobneCislo());
                     /*if (params.length > 1 && params[1] instanceof Long)
                         cmp2 = Long.compare((long) params[1], e1.getId());*/
