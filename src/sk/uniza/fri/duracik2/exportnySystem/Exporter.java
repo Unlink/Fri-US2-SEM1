@@ -26,17 +26,13 @@ public class Exporter {
     private static final String TOVARYCSV = "tovary.csv";
     private static final String ODBERATELIACSV = "odberatelia.csv";
     private static final String SKLADYCSV = "sklady.csv";
+    private static final String COMMA = ",";
 
     private File aOutputDirectory;
     private RBTree<Tovar> aTovary;
     private RBTree<Velkosklad> aSklady;
     private RBTree<Odberatel> aOdberatelia;
     private RBTree<Expedicia> aExpedicie;
-
-    private BufferedWriter brSklady;
-    private BufferedWriter brOdberatelia;
-    private BufferedWriter brTovary;
-    private BufferedWriter brExpedice;
     
     private LinkedList<IToCSV> fronta;
 
@@ -56,17 +52,14 @@ public class Exporter {
         this.aOutputDirectory = outputDirectory;
     }
 
-    public void exportuj(ExportnySystem paSystem) throws IOException {
-        //Vytvorenie súborov         brSklady = new BufferedWriter(new FileWriter(new File(aOutputDirectory, SKLADYCSV)));
-        brOdberatelia = new BufferedWriter(new FileWriter(new File(aOutputDirectory, ODBERATELIACSV)));
-        brTovary = new BufferedWriter(new FileWriter(new File(aOutputDirectory, TOVARYCSV)));
-        brExpedice = new BufferedWriter(new FileWriter(new File(aOutputDirectory, EXPEDICIECSV)));
+    public void exportuj(ExportnySystem paSystem) throws IOException { 
         //Exportujeme sklady
         Iterator<Velkosklad> it = paSystem.dajZoznamSkladov();
         while (it.hasNext()) {
             Velkosklad sklad = it.next();
-           
+            pridajNaExport(sklad);
         }
+        doExport();
     }
 
     private void pridajNaExport(IToCSV obj) {
@@ -119,6 +112,38 @@ public class Exporter {
         else {
             return attr.toString();
         }
+    }
+
+    private void doExport() throws IOException {
+        try (
+            BufferedWriter brSklady = new BufferedWriter(new FileWriter(new File(aOutputDirectory, SKLADYCSV)));
+            BufferedWriter brOdberatelia = new BufferedWriter(new FileWriter(new File(aOutputDirectory, ODBERATELIACSV)));
+            BufferedWriter brTovary = new BufferedWriter(new FileWriter(new File(aOutputDirectory, TOVARYCSV)));
+            BufferedWriter brExpedice = new BufferedWriter(new FileWriter(new File(aOutputDirectory, EXPEDICIECSV)))
+        ) {
+            while (!fronta.isEmpty()) {
+                IToCSV obj = fronta.removeFirst();
+                if (obj instanceof Tovar)
+                    writeLine(brTovary, obj);
+                else if (obj instanceof Velkosklad)
+                    writeLine(brSklady, obj);
+                else if (obj instanceof Odberatel)
+                    writeLine(brOdberatelia, obj);
+                else if (obj instanceof Expedicia)
+                    writeLine(brExpedice, obj);
+            }
+        }
+    }
+
+    private void writeLine(BufferedWriter paBw, IToCSV paObj) throws IOException {
+        Object[] data = paObj.toCsvData();
+        for (int i = 0; i < data.length; i++) {
+            paBw.write(objToString(data[i]));
+            if (i < (data.length-1)) {
+                paBw.write(COMMA);
+            }
+        }
+        paBw.newLine();
     }
 
 }
