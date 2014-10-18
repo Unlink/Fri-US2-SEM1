@@ -90,8 +90,6 @@ public class Main {
         };
         RBTree<Osoba> osoby = new RBTree<>(porovnavacPodlaMena);*/
         
-        System.out.println(null instanceof Object);
-        
         RBTree<Integer> t = new RBTree<>();
         t.insert(4);
         t.insert(7);
