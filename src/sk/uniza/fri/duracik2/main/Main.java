@@ -6,12 +6,22 @@
 
 package sk.uniza.fri.duracik2.main;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sk.uniza.fri.duracik2.exportnySystem.Exporter;
+import sk.uniza.fri.duracik2.exportnySystem.ExportnySystem;
 import sk.uniza.fri.duracik2.exportnySystem.Tovar;
 import sk.uniza.fri.duracik2.tree.RBTree;
 import sk.uniza.fri.duracik2.tree.TreeIndexer;
@@ -21,7 +31,42 @@ import sk.uniza.fri.duracik2.tree.TreeIndexer;
  * @author Unlink
  */
 public class Main {
+    
+    public static Date STD(String str) {
+        try {
+            return new SimpleDateFormat("dd.mm.yyyy").parse(str);
+        } catch (ParseException ex) {
+            return null;
+        }
+    }
+    
     public static void main(String[] args) {
+        
+        ExportnySystem s = new ExportnySystem();
+        s.pridajVelkosklad(1, "Názov skladu 1", "Adresa skladu 1");
+        s.pridajVelkosklad(2, "Názov skladu 2", "Adresa skladu 4");
+        s.pridajVelkosklad(3, "Názov skladu 3", "Adresa skladu 4");
+        s.pridajVelkosklad(4, "Názov skladu 4", "Adresa skladu 4");
+        
+        s.pridajOdberatela(1, "1", "1. Odberatel", "Adresa1");
+        s.pridajOdberatela(1, "2", "2. Odberatel", "Adresa2");
+        s.pridajOdberatela(2, "3", "3. Odberatel", "Adresa3");
+        s.pridajOdberatela(3, "4", "4. Odberatel", "Adresa4");
+        
+        s.naskladniTovar(new Tovar(1, "AA", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
+        s.naskladniTovar(new Tovar(2, "AA", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
+        s.naskladniTovar(new Tovar(3, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
+        s.naskladniTovar(new Tovar(4, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 1);
+        s.naskladniTovar(new Tovar(5, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
+        s.naskladniTovar(new Tovar(6, "CC", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
+        
+        Exporter export = new Exporter(new File("C:\\Users\\Unlink\\Desktop\\ExportedData"));
+        try {
+            export.exportuj(s);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
         /*TreeIndexer porovnavacPodlaMena = new TreeIndexer() {
 
             @Override

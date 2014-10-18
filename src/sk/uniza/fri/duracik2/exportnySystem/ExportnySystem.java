@@ -21,7 +21,7 @@ public class ExportnySystem {
     private RBTree<Tovar> aZoznamTovarov;
     private RBTree<Velkosklad> aVelkosklady;
 
-    public ExportnySystem(RBTree<Tovar> aZoznamTovarov, RBTree<Velkosklad> aVelkosklady) {
+    public ExportnySystem() {
         this.aZoznamTovarov = new RBTree<>(new TreeIndexer<Tovar>() {
             @Override
             public int compare(Tovar e1, Object... params) {

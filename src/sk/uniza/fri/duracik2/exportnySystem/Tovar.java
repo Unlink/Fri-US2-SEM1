@@ -22,6 +22,14 @@ public class Tovar implements Comparable<Tovar>, IToCSV {
     private AMiesto aAktualnaLokacia;
     private Expedicia aPosExpZaznam;
 
+    public Tovar(long paVyrobneCislo, String paEanKod, Date paDatumVyroby, Date paDatumSpotreby, int paCena) {
+        this.aVyrobneCislo = paVyrobneCislo;
+        this.aEanKod = paEanKod;
+        this.aDatumVyroby = paDatumVyroby;
+        this.aDatumSpotreby = paDatumSpotreby;
+        this.aCena = paCena;
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Gettery a settery">
     public long getVyrobneCislo() {
         return aVyrobneCislo;
