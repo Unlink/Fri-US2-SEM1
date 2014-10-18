@@ -7,13 +7,13 @@ package sk.uniza.fri.duracik2.exportnySystem;
 
 import sk.uniza.fri.duracik2.io.IToCSV;
 import java.util.Date;
+import sk.uniza.fri.duracik2.io.EObjectType;
 
 /**
  *
  * @author Unlink
  */
 public class Tovar implements Comparable<Tovar>, IToCSV {
-
     private long aVyrobneCislo;
     private String aEanKod;
     private Date aDatumVyroby;
@@ -82,6 +82,16 @@ public class Tovar implements Comparable<Tovar>, IToCSV {
     @Override
     public String toString() {
         return ""+aVyrobneCislo;
+    }
+
+    @Override
+    public EObjectType getTyp() {
+        return EObjectType.TOVAR;
+    }
+
+    @Override
+    public String getObjectKey() {
+        return ""+getVyrobneCislo();
     }
 
 }

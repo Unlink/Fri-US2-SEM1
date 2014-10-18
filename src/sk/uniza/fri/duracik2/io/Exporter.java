@@ -27,27 +27,32 @@ import sk.uniza.fri.duracik2.tree.RBTree;
  */
 public class Exporter {
 
-    private static final String EXPEDICIECSV = "expedicie.csv";
+    /*private static final String EXPEDICIECSV = "expedicie.csv";
     private static final String TOVARYCSV = "tovary.csv";
     private static final String ODBERATELIACSV = "odberatelia.csv";
     private static final String SKLADYCSV = "sklady.csv";
+    */
     private static final String COMMA = ",";
 
     private File aOutputDirectory;
-    private final RBTree<Tovar> aTovary;
+    /*private final RBTree<Tovar> aTovary;
     private final RBTree<Velkosklad> aSklady;
     private final RBTree<Odberatel> aOdberatelia;
-    private final RBTree<Expedicia> aExpedicie;
+    private final RBTree<Expedicia> aExpedicie;*/
+    
+    private final RBTree<Integer> aSpracovaneObj;
     
     private final LinkedList<IToCSV> fronta;
 
     public Exporter(File aOutputDirectory) {
         
+        aSpracovaneObj = new RBTree<>();
+        
         this.aOutputDirectory = aOutputDirectory;
-        aTovary = new RBTree<>();
+        /*aTovary = new RBTree<>();
         aOdberatelia = new RBTree<>();
         aSklady = new RBTree<>();
-        aExpedicie = new RBTree<>();
+        aExpedicie = new RBTree<>();*/
         fronta = new LinkedList<>();
     }
 
@@ -79,6 +84,15 @@ public class Exporter {
     }
 
     private void pridajNaExport(IToCSV obj) {
+        /**
+         * http://stackoverflow.com/questions/909843/java-how-to-get-the-unique-id-of-an-object-which-overrides-hashcode
+         * Ale nieje zaručené že bude vždy fungovať
+         */
+        if (!aSpracovaneObj.contains(System.identityHashCode(obj))) {
+            aSpracovaneObj.insert(System.identityHashCode(obj));
+            fronta.add(obj);
+        }
+        /*
         if (obj instanceof Tovar) {
             if (!aTovary.contains((Tovar)obj)) {
                 aTovary.insert((Tovar)obj);
@@ -103,10 +117,11 @@ public class Exporter {
                 fronta.add(obj);
             }
         }
+        */
     }
     
     private String objToString(Object attr) {
-        if (attr instanceof Tovar) {
+        /*if (attr instanceof Tovar) {
             pridajNaExport((IToCSV) attr);
             return ((Tovar) attr).getVyrobneCislo() + "";
         }
@@ -121,6 +136,10 @@ public class Exporter {
         else if (attr instanceof Odberatel) {
             pridajNaExport((IToCSV) attr);
             return "o_" + ((Odberatel) attr).getId();
+        }*/
+        if (attr instanceof IToCSV) {
+            pridajNaExport((IToCSV) attr);
+            return ((IToCSV) attr).getObjectKey();
         }
         else if (attr instanceof Date) {
             return ((Date) attr).getTime() + "";
@@ -134,22 +153,20 @@ public class Exporter {
     }
 
     private void doExport() throws IOException {
-        try (
-            BufferedWriter brSklady = new BufferedWriter(new FileWriter(new File(aOutputDirectory, SKLADYCSV)));
-            BufferedWriter brOdberatelia = new BufferedWriter(new FileWriter(new File(aOutputDirectory, ODBERATELIACSV)));
-            BufferedWriter brTovary = new BufferedWriter(new FileWriter(new File(aOutputDirectory, TOVARYCSV)));
-            BufferedWriter brExpedice = new BufferedWriter(new FileWriter(new File(aOutputDirectory, EXPEDICIECSV)))
-        ) {
+        BufferedWriter[] writre = new BufferedWriter[EObjectType.values().length];
+        try {
+            for (int i = 0; i < writre.length; i++) {
+                writre[i] = new BufferedWriter(new FileWriter(new File(aOutputDirectory, EObjectType.values()[i].getFilename())));
+            }
             while (!fronta.isEmpty()) {
                 IToCSV obj = fronta.removeFirst();
-                if (obj instanceof Tovar)
-                    writeLine(brTovary, obj);
-                else if (obj instanceof Velkosklad)
-                    writeLine(brSklady, obj);
-                else if (obj instanceof Odberatel)
-                    writeLine(brOdberatelia, obj);
-                else if (obj instanceof Expedicia)
-                    writeLine(brExpedice, obj);
+                writeLine(writre[obj.getTyp().ordinal()], obj);
+            }
+        }
+        finally {
+            for (int i = 0; i < writre.length; i++) {
+                if (writre[i] != null)
+                    writre[i].close();
             }
         }
     }

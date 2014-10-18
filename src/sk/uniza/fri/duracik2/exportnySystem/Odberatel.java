@@ -6,6 +6,7 @@
 
 package sk.uniza.fri.duracik2.exportnySystem;
 
+import sk.uniza.fri.duracik2.io.EObjectType;
 import sk.uniza.fri.duracik2.io.IToCSV;
 
 /**
@@ -44,6 +45,16 @@ public class Odberatel extends AMiesto implements IToCSV {
     @Override
     public Object[] toCsvData() {
         return new Object[]{aId, aSklad, aNazov, aAdresa};
+    }
+
+    @Override
+    public EObjectType getTyp() {
+        return EObjectType.ODBERATEL;
+    }
+
+    @Override
+    public String getObjectKey() {
+        return "o_"+getId();
     }
     
 }

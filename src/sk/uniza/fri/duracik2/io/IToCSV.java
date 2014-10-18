@@ -13,4 +13,10 @@ package sk.uniza.fri.duracik2.io;
 public interface IToCSV {
     
     public Object[] toCsvData();
+    public EObjectType getTyp();
+    /**
+     * Vráti klúč pre zápis do súboru
+     * @return 
+     */
+    public String getObjectKey();
 }

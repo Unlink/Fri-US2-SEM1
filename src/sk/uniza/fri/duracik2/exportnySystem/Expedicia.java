@@ -8,6 +8,7 @@ package sk.uniza.fri.duracik2.exportnySystem;
 
 import sk.uniza.fri.duracik2.io.IToCSV;
 import java.util.Date;
+import sk.uniza.fri.duracik2.io.EObjectType;
 
 /**
  *
@@ -90,6 +91,16 @@ public class Expedicia implements Comparable<Expedicia>, IToCSV {
     @Override
     public Object[] toCsvData() {
         return new Object[]{aId, aTovar, aEvcPrepravcu, aDatZaciatku, aDatKonca, aPredchadzajuca, aZdroj, aCiel};
+    }
+
+    @Override
+    public EObjectType getTyp() {
+        return EObjectType.EXPEDICIA;
+    }
+
+    @Override
+    public String getObjectKey() {
+        return ""+getId();
     }
     
 }

@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import sk.uniza.fri.duracik2.io.EObjectType;
 import sk.uniza.fri.duracik2.tree.RBTree;
 import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
@@ -292,6 +293,16 @@ public class Velkosklad extends AMiesto implements IToCSV {
     @Override
     public Object[] toCsvData() {
         return new Object[]{aId, aNazov, aAdresa};
+    }
+
+    @Override
+    public EObjectType getTyp() {
+        return EObjectType.SKLAD;
+    }
+
+    @Override
+    public String getObjectKey() {
+        return "s_"+getId();
     }
     
 }
