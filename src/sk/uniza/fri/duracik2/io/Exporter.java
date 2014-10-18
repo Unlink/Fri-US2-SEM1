@@ -74,6 +74,8 @@ public class Exporter {
         /**
          * http://stackoverflow.com/questions/909843/java-how-to-get-the-unique-id-of-an-object-which-overrides-hashcode
          * Ale nieje zaručené že bude vždy fungovať
+         * System.identityHashCode() Vráti hash code Triedy object, 
+         * ktorá ho ráta za adresy v pamäti => malo by to byť unikátne
          */
         if (!aSpracovaneObj.contains(System.identityHashCode(obj))) {
             aSpracovaneObj.insert(System.identityHashCode(obj));
