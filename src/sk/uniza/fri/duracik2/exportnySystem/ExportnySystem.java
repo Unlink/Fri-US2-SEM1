@@ -56,6 +56,13 @@ public class ExportnySystem {
         });
     }
 
+    public Iterator<Velkosklad> dajZoznamSkladov() {
+        return aVelkosklady.levelOrderIterator();
+    }
+    
+    public Iterator<Tovar> dajZoznamTovatov() {
+        return aZoznamTovarov.levelOrderIterator();
+    }
     
     /**
      * 1 vyhľadanie  zadaného  počtu  tovarov  s konkrétnym  EAN  kódom  a  s dátumom  najneskoršej  

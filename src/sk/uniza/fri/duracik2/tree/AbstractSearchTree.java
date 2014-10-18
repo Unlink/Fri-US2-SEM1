@@ -147,6 +147,10 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         return findByParams(paPrvok);
     }
     
+    public boolean contains(E paPrvok) {
+        return find(paPrvok) != null;
+    }
+    
     /**
      * Nájde prvok v strome podľa parametrov indexera
      * @param params
