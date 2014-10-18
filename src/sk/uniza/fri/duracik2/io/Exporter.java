@@ -27,18 +27,9 @@ import sk.uniza.fri.duracik2.tree.RBTree;
  */
 public class Exporter {
 
-    /*private static final String EXPEDICIECSV = "expedicie.csv";
-    private static final String TOVARYCSV = "tovary.csv";
-    private static final String ODBERATELIACSV = "odberatelia.csv";
-    private static final String SKLADYCSV = "sklady.csv";
-    */
     private static final String COMMA = ",";
 
     private File aOutputDirectory;
-    /*private final RBTree<Tovar> aTovary;
-    private final RBTree<Velkosklad> aSklady;
-    private final RBTree<Odberatel> aOdberatelia;
-    private final RBTree<Expedicia> aExpedicie;*/
     
     private final RBTree<Integer> aSpracovaneObj;
     
@@ -49,10 +40,6 @@ public class Exporter {
         aSpracovaneObj = new RBTree<>();
         
         this.aOutputDirectory = aOutputDirectory;
-        /*aTovary = new RBTree<>();
-        aOdberatelia = new RBTree<>();
-        aSklady = new RBTree<>();
-        aExpedicie = new RBTree<>();*/
         fronta = new LinkedList<>();
     }
 
@@ -92,51 +79,9 @@ public class Exporter {
             aSpracovaneObj.insert(System.identityHashCode(obj));
             fronta.add(obj);
         }
-        /*
-        if (obj instanceof Tovar) {
-            if (!aTovary.contains((Tovar)obj)) {
-                aTovary.insert((Tovar)obj);
-                fronta.add(obj);
-            }
-        }
-        else if (obj instanceof Expedicia) {
-           if (!aExpedicie.contains((Expedicia)obj)) {
-                aExpedicie.insert((Expedicia)obj);
-                fronta.add(obj);
-            }
-        }
-        else if (obj instanceof Velkosklad) {
-            if (!aSklady.contains((Velkosklad)obj)) {
-                aSklady.insert((Velkosklad)obj);
-                fronta.add(obj);
-            }
-        }
-        else if (obj instanceof Odberatel) {
-            if (!aOdberatelia.contains((Odberatel)obj)) {
-                aOdberatelia.insert((Odberatel)obj);
-                fronta.add(obj);
-            }
-        }
-        */
     }
     
     private String objToString(Object attr) {
-        /*if (attr instanceof Tovar) {
-            pridajNaExport((IToCSV) attr);
-            return ((Tovar) attr).getVyrobneCislo() + "";
-        }
-        else if (attr instanceof Expedicia) {
-            pridajNaExport((IToCSV) attr);
-            return ((Expedicia) attr).getId() + "";
-        }
-        else if (attr instanceof Velkosklad) {
-            pridajNaExport((IToCSV) attr);
-            return "s_" + ((Velkosklad) attr).getId();
-        }
-        else if (attr instanceof Odberatel) {
-            pridajNaExport((IToCSV) attr);
-            return "o_" + ((Odberatel) attr).getId();
-        }*/
         if (attr instanceof IToCSV) {
             pridajNaExport((IToCSV) attr);
             return ((IToCSV) attr).getObjectKey();
