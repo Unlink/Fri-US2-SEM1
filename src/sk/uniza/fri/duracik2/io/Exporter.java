@@ -34,20 +34,14 @@ public class Exporter {
     private static final String COMMA = ",";
 
     private File aOutputDirectory;
-    private RBTree<Tovar> aTovary;
-    private RBTree<Velkosklad> aSklady;
-    private RBTree<Odberatel> aOdberatelia;
-    private RBTree<Expedicia> aExpedicie;
+    private final RBTree<Tovar> aTovary;
+    private final RBTree<Velkosklad> aSklady;
+    private final RBTree<Odberatel> aOdberatelia;
+    private final RBTree<Expedicia> aExpedicie;
     
-    
-    private RBTree<Comparable<Comparable>>[] aSpracovaneObjekty;
-    private LinkedList<IToCSV> fronta;
+    private final LinkedList<IToCSV> fronta;
 
     public Exporter(File aOutputDirectory) {
-        
-        for (int i = 0; i < EObjectType.values().length; i++) {
-            aSpracovaneObjekty[i] = new RBTree<>();
-        }
         
         this.aOutputDirectory = aOutputDirectory;
         aTovary = new RBTree<>();
