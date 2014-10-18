@@ -6,6 +6,7 @@
 
 package sk.uniza.fri.duracik2.exportnySystem;
 
+import sk.uniza.fri.duracik2.io.IToCSV;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;

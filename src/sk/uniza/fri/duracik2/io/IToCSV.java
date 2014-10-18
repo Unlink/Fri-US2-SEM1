@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 
-package sk.uniza.fri.duracik2.exportnySystem;
+package sk.uniza.fri.duracik2.io;
 
 /**
  *
  * @author Unlink
  */
 public interface IToCSV {
+    
     public Object[] toCsvData();
 }

@@ -20,7 +20,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sk.uniza.fri.duracik2.exportnySystem.Exporter;
+import sk.uniza.fri.duracik2.io.Exporter;
 import sk.uniza.fri.duracik2.exportnySystem.ExportnySystem;
 import sk.uniza.fri.duracik2.exportnySystem.Tovar;
 import sk.uniza.fri.duracik2.tree.RBTree;

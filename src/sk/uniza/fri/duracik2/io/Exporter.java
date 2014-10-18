@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sk.uniza.fri.duracik2.exportnySystem;
+package sk.uniza.fri.duracik2.io;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,6 +14,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sk.uniza.fri.duracik2.exportnySystem.Expedicia;
+import sk.uniza.fri.duracik2.exportnySystem.ExportnySystem;
+import sk.uniza.fri.duracik2.exportnySystem.Odberatel;
+import sk.uniza.fri.duracik2.exportnySystem.Tovar;
+import sk.uniza.fri.duracik2.exportnySystem.Velkosklad;
 import sk.uniza.fri.duracik2.tree.RBTree;
 
 /**
@@ -34,9 +39,16 @@ public class Exporter {
     private RBTree<Odberatel> aOdberatelia;
     private RBTree<Expedicia> aExpedicie;
     
+    
+    private RBTree<Comparable<Comparable>>[] aSpracovaneObjekty;
     private LinkedList<IToCSV> fronta;
 
     public Exporter(File aOutputDirectory) {
+        
+        for (int i = 0; i < EObjectType.values().length; i++) {
+            aSpracovaneObjekty[i] = new RBTree<>();
+        }
+        
         this.aOutputDirectory = aOutputDirectory;
         aTovary = new RBTree<>();
         aOdberatelia = new RBTree<>();
