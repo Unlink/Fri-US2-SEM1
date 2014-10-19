@@ -6,10 +6,16 @@
 
 package sk.uniza.fri.duracik2.exportnySystem;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sk.uniza.fri.duracik2.io.Exporter;
+import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.RBTree;
 import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
@@ -338,5 +344,60 @@ public class ExportnySystem {
     
     private Velkosklad vyhladajSklad(int idSkladu) {
         return aVelkosklady.findByParams(idSkladu);
+    }
+    
+    public boolean importujData(File paZlozka) {
+        Importer importer = new Importer(paZlozka);
+        if (!importer.importuj()) return false;
+        
+        //Vlož tovary do datazy tovarov
+        for (Tovar t : importer.getImportovaneTovary()) {
+            aZoznamTovarov.insert(t);
+        }
+        
+        //Vlož veľkosklady
+        for (Velkosklad s : importer.getImportovaneSklady()) {
+            if (s.isValid()) aVelkosklady.insert(s);
+        }
+        
+        //Prirad Odberatelov
+        for (Odberatel odberatel : importer.getImportovanyOdberatelia()) {
+            if (odberatel.getSklad() != null)
+                odberatel.getSklad().priradOdberatela(odberatel);
+        }
+        
+        //Vloženie dát o tovaroch
+        for (Tovar tovar : importer.getImportovaneTovary()) {
+            //Ak nebol nikam expedovaný
+            if (tovar.getPosExpZaznam() == null)
+                ((Velkosklad)tovar.getAktualnaLokacia()).naskladniTovar(tovar);
+            else {
+                //Ak je tovar tam, kde by mal byť podla poslednej expedicie
+                if (tovar.getPosExpZaznam().getCiel() == tovar.getAktualnaLokacia()) {
+                    tovar.getAktualnaLokacia().naskladniTovar(tovar.getPosExpZaznam());
+                }
+                else if (tovar.getPosExpZaznam().getZdroj() == tovar.getAktualnaLokacia()) {
+                    ((Velkosklad)tovar.getAktualnaLokacia()).vlozExpedicnyZaznam(tovar.getPosExpZaznam());
+                }
+                //Postupne prejdeme predchadzajuce expedicie a vložíme históriu
+                Expedicia prev = tovar.getPosExpZaznam().getPredchadzajuca();
+                while (prev != null) {
+                    prev.getCiel().vlozInfoODovavke(prev);
+                    prev = prev.getPredchadzajuca();
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    public boolean exportujData(File paZlozka) {
+        Exporter exporter = new Exporter(paZlozka);
+        try {
+            exporter.exportuj(this);
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
     }
 }

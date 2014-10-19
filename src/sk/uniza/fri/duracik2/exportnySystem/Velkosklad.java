@@ -166,6 +166,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
     }
     
     public boolean priradOdberatela(Odberatel paOdberatel) {
+        paOdberatel.setSklad(this);
         return aOdberatelia.insert(paOdberatel);
     }
     
@@ -182,6 +183,9 @@ public class Velkosklad extends AMiesto implements IToCSV {
         aValid = false;
         for (Tovar tovar : aTovaryById) {
             paSklad2.naskladniTovar(tovar);
+        }
+        for (Odberatel odberatel : aOdberatelia) {
+            paSklad2.priradOdberatela(odberatel);
         }
         aTovaryByDatum.clear();
         aTovaryByEan.clear();
@@ -316,6 +320,14 @@ public class Velkosklad extends AMiesto implements IToCSV {
     @Override
     public String toString() {
         return "Velkosklad{" + "aId=" + aId + ", aValid=" + aValid + '}';
+    }
+
+    public boolean isValid() {
+        return aValid;
+    }
+
+    public void vlozExpedicnyZaznam(Expedicia paPosExpZaznam) {
+        aExpedovane.insert(paPosExpZaznam);
     }
     
     

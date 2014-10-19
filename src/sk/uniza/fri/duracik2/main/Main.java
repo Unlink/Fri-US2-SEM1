@@ -72,7 +72,13 @@ public class Main {
         s.vyložTovar(1);
         s.zrusOdberatela(2, "3");
         
-        Exporter export = new Exporter(new File("C:\\Users\\Unlink\\Desktop\\ExportedData"));
+        
+        s.exportujData(new File("C:\\Users\\Unlink\\Desktop\\ExportedData"));
+        ExportnySystem s2 = new ExportnySystem();
+        s2.importujData(new File("C:\\Users\\Unlink\\Desktop\\ExportedData"));
+        s2.exportujData(new File("C:\\Users\\Unlink\\Desktop\\ExportedData2"));
+        
+        /*Exporter export = new Exporter(new File("C:\\Users\\Unlink\\Desktop\\ExportedData"));
         try {
             export.exportuj(s);
         } catch (IOException ex) {
@@ -97,7 +103,7 @@ public class Main {
         
         for (Expedicia importovaneExpedicie : importer.getImportovaneExpedicie()) {
             System.out.println(importovaneExpedicie);
-        }
+        }*/
         /*TreeIndexer porovnavacPodlaMena = new TreeIndexer() {
 
             @Override

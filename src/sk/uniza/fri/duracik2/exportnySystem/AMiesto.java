@@ -38,13 +38,17 @@ public abstract class AMiesto implements Comparable<AMiesto> {
     // </editor-fold>
 
     public boolean naskladniTovar(Expedicia paExpedicia) {
-        aZoznamPrijatychTovatov.add(paExpedicia);
+        vlozInfoODovavke(paExpedicia);
         paExpedicia.getTovar().setAktualnaLokacia(this);
         return true;
     }
     
     public Iterator<Expedicia> dajDodavky() {
         return aZoznamPrijatychTovatov.iterator();
+    }
+
+    public void vlozInfoODovavke(Expedicia paExpedicia) {
+        aZoznamPrijatychTovatov.add(paExpedicia);
     }
     
 }
