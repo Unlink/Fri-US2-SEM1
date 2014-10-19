@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import sk.uniza.fri.duracik2.io.EObjectType;
+import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.RBTree;
 import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
@@ -20,14 +21,36 @@ import sk.uniza.fri.duracik2.tree.TreeIndexer;
  * @author Unlink
  */
 public class Velkosklad extends AMiesto implements IToCSV {
+    public static final TreeIndexer<Velkosklad> INDEXER = new TreeIndexer<Velkosklad>() {
+        @Override
+        public int compare(Velkosklad e1, Object... params) {
+            if (params[0] instanceof Velkosklad) {
+                Velkosklad t = (Velkosklad) params[0];
+                return (e1.getId() == t.getId()) ? 0 : (e1.getId() > t.getId()) ? -1 : 1;
+            }
+            else if (params[0] instanceof Integer) {
+                int l = (int) params[0];
+                return (e1.getId() == l) ? 0 : (e1.getId() > l) ? -1 : 1;
+            }
+            else {
+                return 0;
+            }
+        }
+    };
+    
     private static final TreeIndexer<Tovar> aTovarIndexerID;
     private static final TreeIndexer<Tovar> aTovarIndexerEan;
     private static final TreeIndexer<Tovar> aTovarIndexerDatum;
     private static final TreeIndexer<Odberatel> aOdberatelIndexer;
     private static final TreeIndexer<Expedicia> aExpedicieIndexer;
+
+    public static Integer getKey(String[] paAtrrs) {
+        return Integer.parseInt(paAtrrs[0]);
+    }
     
     
     private int aId;
+    private boolean aValid;
     private RBTree<Tovar> aTovaryById;
     private RBTree<Tovar> aTovaryByEan;
     private RBTree<Tovar> aTovaryByDatum;
@@ -38,6 +61,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
     public Velkosklad(int aId, String aNazov, String aAdresa) {
         super(aNazov, aAdresa);
         this.aId = aId;
+        this.aValid = true;
         aTovaryById = new RBTree<>(aTovarIndexerID);
         aTovaryByEan = new RBTree<>(aTovarIndexerEan);
         aTovaryByDatum = new RBTree<>(aTovarIndexerDatum);
@@ -154,7 +178,8 @@ public class Velkosklad extends AMiesto implements IToCSV {
         return true;
     }
     
-    public void presunTovary(Velkosklad paSklad2) {
+    public void zrusSklad(Velkosklad paSklad2) {
+        aValid = false;
         for (Tovar tovar : aTovaryById) {
             paSklad2.naskladniTovar(tovar);
         }
@@ -185,19 +210,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
     }
     
     static {
-        aTovarIndexerID = new TreeIndexer<Tovar>() {
-            @Override
-            public int compare(Tovar e1, Object... params) {
-                long e2id = 0;
-                if (params[0] instanceof Tovar)
-                    e2id = ((Tovar)params[0]).getVyrobneCislo();
-                else if (params[0] instanceof Number)
-                    e2id = (long) params[0];
-                else 
-                    return 0;
-                return (e1.getVyrobneCislo() == e2id) ? 0 : (e1.getVyrobneCislo() > e2id) ? -1 : 1;
-            }
-        };
+        aTovarIndexerID = Tovar.INDEXER;
         aTovarIndexerEan = new TreeIndexer<Tovar>() {
             @Override
             public int compare(Tovar e1, Object... params) {
@@ -252,19 +265,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
             }
 
         };
-        aOdberatelIndexer = new TreeIndexer<Odberatel>() {
-            @Override
-            public int compare(Odberatel e1, Object... params) {
-                String id = "0";
-                if (params[0] instanceof Odberatel)
-                    id = ((Odberatel)params[0]).getId();
-                else if (params[0] instanceof String)
-                    id = (String) params[0];
-                else 
-                    return 0;
-                return id.compareTo(e1.getId());
-            }
-        };
+        aOdberatelIndexer = Odberatel.INDEXER;
         aExpedicieIndexer = new TreeIndexer<Expedicia>() {
             @Override
             public int compare(Expedicia e1, Object... params) {
@@ -292,7 +293,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
 
     @Override
     public Object[] toCsvData() {
-        return new Object[]{aId, aNazov, aAdresa};
+        return new Object[]{aId, aNazov, aAdresa, aValid};
     }
 
     @Override
@@ -304,5 +305,19 @@ public class Velkosklad extends AMiesto implements IToCSV {
     public String getObjectKey() {
         return "s_"+getId();
     }
+
+    @Override
+    public void fromCSV(Importer paImporter, String[] paAtrrs) {
+        aNazov = paAtrrs[1];
+        aAdresa = paAtrrs[2];
+        aValid = Boolean.parseBoolean(paAtrrs[3]);
+    }
+
+    @Override
+    public String toString() {
+        return "Velkosklad{" + "aId=" + aId + ", aValid=" + aValid + '}';
+    }
+    
+    
     
 }

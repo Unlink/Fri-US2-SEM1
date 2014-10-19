@@ -22,38 +22,8 @@ public class ExportnySystem {
     private RBTree<Velkosklad> aVelkosklady;
 
     public ExportnySystem() {
-        this.aZoznamTovarov = new RBTree<>(new TreeIndexer<Tovar>() {
-            @Override
-            public int compare(Tovar e1, Object... params) {
-                if (params[0] instanceof Tovar) {
-                    Tovar t = (Tovar) params[0];
-                    return (e1.getVyrobneCislo() == t.getVyrobneCislo()) ? 0 : (e1.getVyrobneCislo() > t.getVyrobneCislo()) ? -1 : 1;
-                }
-                else if (params[0] instanceof Long) {
-                    long l = (long) params[0];
-                    return (e1.getVyrobneCislo() == l) ? 0 : (e1.getVyrobneCislo() > l) ? -1 : 1;
-                }
-                else {
-                    return 0;
-                }
-            }
-        });
-        this.aVelkosklady = new RBTree<>(new TreeIndexer<Velkosklad>() {
-            @Override
-            public int compare(Velkosklad e1, Object... params) {
-                if (params[0] instanceof Velkosklad) {
-                    Velkosklad t = (Velkosklad) params[0];
-                    return (e1.getId()== t.getId()) ? 0 : (e1.getId() > t.getId()) ? -1 : 1;
-                }
-                else if (params[0] instanceof Integer) {
-                    int l = (int) params[0];
-                    return (e1.getId() == l) ? 0 : (e1.getId() > l) ? -1 : 1;
-                }
-                else {
-                    return 0;
-                }
-            }
-        });
+        this.aZoznamTovarov = new RBTree<>(Tovar.INDEXER);
+        this.aVelkosklady = new RBTree<>(Velkosklad.INDEXER);
     }
 
     public Iterator<Velkosklad> dajZoznamSkladov() {
@@ -349,7 +319,7 @@ public class ExportnySystem {
         Velkosklad sklad2 = vyhladajSklad(idSkladu2);
         if (sklad2 == null) return false;
         
-        sklad.presunTovary(sklad2);
+        sklad.zrusSklad(sklad2);
         return aVelkosklady.delete(sklad);
     }
     

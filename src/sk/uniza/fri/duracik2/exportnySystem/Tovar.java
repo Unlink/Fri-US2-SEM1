@@ -8,12 +8,36 @@ package sk.uniza.fri.duracik2.exportnySystem;
 import sk.uniza.fri.duracik2.io.IToCSV;
 import java.util.Date;
 import sk.uniza.fri.duracik2.io.EObjectType;
+import sk.uniza.fri.duracik2.io.Importer;
+import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
 /**
  *
  * @author Unlink
  */
 public class Tovar implements Comparable<Tovar>, IToCSV {
+
+    public static final TreeIndexer<Tovar> INDEXER = new TreeIndexer<Tovar>() {
+        @Override
+        public int compare(Tovar e1, Object... params) {
+            if (params[0] instanceof Tovar) {
+                Tovar t = (Tovar) params[0];
+                return (e1.getVyrobneCislo() == t.getVyrobneCislo()) ? 0 : (e1.getVyrobneCislo() > t.getVyrobneCislo()) ? -1 : 1;
+            }
+            else if (params[0] instanceof Long) {
+                long l = (long) params[0];
+                return (e1.getVyrobneCislo() == l) ? 0 : (e1.getVyrobneCislo() > l) ? -1 : 1;
+            }
+            else {
+                return 0;
+            }
+        }
+    };
+
+    public static Long getKey(String[] paAtrrs) {
+        return Long.parseLong(paAtrrs[0]);
+    }
+
     private long aVyrobneCislo;
     private String aEanKod;
     private Date aDatumVyroby;
@@ -81,7 +105,7 @@ public class Tovar implements Comparable<Tovar>, IToCSV {
 
     @Override
     public String toString() {
-        return ""+aVyrobneCislo;
+        return "Tovar{" + "aVyrobneCislo=" + aVyrobneCislo + ", aEanKod=" + aEanKod + ", aAktualnaLokacia=" + aAktualnaLokacia.getNazov() + ", aPosExpZaznam=" + ((aPosExpZaznam == null) ? "null" : aPosExpZaznam.getId()) + '}';
     }
 
     @Override
@@ -91,7 +115,24 @@ public class Tovar implements Comparable<Tovar>, IToCSV {
 
     @Override
     public String getObjectKey() {
-        return ""+getVyrobneCislo();
+        return "" + getVyrobneCislo();
     }
+
+    @Override
+    public void fromCSV(Importer paImporter, String[] paAtrrs) {
+        
+        aEanKod = paAtrrs[1];
+        aDatumVyroby = new Date(Long.parseLong(paAtrrs[2]));
+        aDatumSpotreby = new Date(Long.parseLong(paAtrrs[3]));
+        aCena = Integer.parseInt(paAtrrs[4]);
+        aAktualnaLokacia = (paAtrrs[5].isEmpty())
+            ? null : (paAtrrs[5].startsWith("o_"))
+                ? paImporter.getOrberatel(paAtrrs[5].substring(2)) : 
+                    paImporter.getVelkosklad(Integer.parseInt(paAtrrs[5].substring(2)));
+        aPosExpZaznam = (paAtrrs.length == 7 && !paAtrrs[6].isEmpty()) ? paImporter.getExpedicia(Long.parseLong(paAtrrs[6])) : null;
+
+    }
+    
+    
 
 }

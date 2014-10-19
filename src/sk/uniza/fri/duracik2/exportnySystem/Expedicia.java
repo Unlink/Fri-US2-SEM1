@@ -9,25 +9,51 @@ package sk.uniza.fri.duracik2.exportnySystem;
 import sk.uniza.fri.duracik2.io.IToCSV;
 import java.util.Date;
 import sk.uniza.fri.duracik2.io.EObjectType;
+import sk.uniza.fri.duracik2.io.Importer;
+import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
 /**
  *
  * @author Unlink
  */
 public class Expedicia implements Comparable<Expedicia>, IToCSV {
-
+    public static final TreeIndexer<Expedicia> INDEXER = new TreeIndexer<Expedicia>() {
+        @Override
+        public int compare(Expedicia e1, Object... params) {
+            if (params[0] instanceof Expedicia) {
+                Expedicia t = (Expedicia) params[0];
+                return (e1.getId()== t.getId()) ? 0 : (e1.getId()> t.getId()) ? -1 : 1;
+            }
+            else if (params[0] instanceof Long) {
+                long l = (long) params[0];
+                return (e1.getId()== l) ? 0 : (e1.getId()> l) ? -1 : 1;
+            }
+            else {
+                return 0;
+            }
+        }
+    };
     private static long aLastId = 1;
+
+    public static Long getKey(String[] paAtrrs) {
+        return Long.parseLong(paAtrrs[0]);
+    }
     
     //Auto generované skrité ID
     private final long aId;
     private Tovar aTovar;
-    private final String aEvcPrepravcu;
-    private final Date aDatZaciatku;
-    private final Date aDatKonca;
-    private final Expedicia aPredchadzajuca;
+    private String aEvcPrepravcu;
+    private Date aDatZaciatku;
+    private Date aDatKonca;
+    private Expedicia aPredchadzajuca;
     private AMiesto aZdroj;
     private AMiesto aCiel;
 
+    public Expedicia(long paId) {
+        this.aId = paId;
+        aLastId = Math.max(aLastId, aId+1);
+    }
+    
     public Expedicia(Tovar aTovar, String aEvcPrepravcu, Date aDatZaciatku, Date aDatKonca, Expedicia aPredchadzajuca, AMiesto aZdroj, AMiesto aCiel) {
         this.aTovar = aTovar;
         this.aEvcPrepravcu = aEvcPrepravcu;
@@ -101,6 +127,25 @@ public class Expedicia implements Comparable<Expedicia>, IToCSV {
     @Override
     public String getObjectKey() {
         return ""+getId();
+    }
+
+    @Override
+    public void fromCSV(Importer paImporter, String[] paAtrrs) {
+        aTovar = paImporter.getTovar(Long.parseLong(paAtrrs[1]));
+        aEvcPrepravcu = paAtrrs[2];
+        aDatZaciatku = new Date(Long.parseLong(paAtrrs[3]));
+        aDatKonca = new Date(Long.parseLong(paAtrrs[4]));
+        aPredchadzajuca = (paAtrrs[5].isEmpty()) ? null : paImporter.getExpedicia(Long.parseLong(paAtrrs[5]));
+        aZdroj = paImporter.getVelkosklad(Integer.parseInt(paAtrrs[6].substring(2)));
+        aCiel = (paAtrrs[7].isEmpty())
+            ? null : (paAtrrs[7].startsWith("o_"))
+                ? paImporter.getOrberatel(paAtrrs[7].substring(2)) : 
+                    paImporter.getVelkosklad(Integer.parseInt(paAtrrs[7].substring(2)));
+    }
+
+    @Override
+    public String toString() {
+        return "Expedicia{" + "aId=" + aId + ", aTovar=" + aTovar.getVyrobneCislo() + ", aEvcPrepravcu=" + aEvcPrepravcu + ", aPredchadzajuca=" + (aPredchadzajuca  == null ? "null" : aPredchadzajuca.getId()) + ", aZdroj=" + aZdroj.getNazov() + ", aCiel=" + aCiel.getNazov() + '}';
     }
     
 }

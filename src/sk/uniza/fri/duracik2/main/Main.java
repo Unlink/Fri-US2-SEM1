@@ -20,9 +20,13 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sk.uniza.fri.duracik2.exportnySystem.Expedicia;
 import sk.uniza.fri.duracik2.io.Exporter;
 import sk.uniza.fri.duracik2.exportnySystem.ExportnySystem;
+import sk.uniza.fri.duracik2.exportnySystem.Odberatel;
 import sk.uniza.fri.duracik2.exportnySystem.Tovar;
+import sk.uniza.fri.duracik2.exportnySystem.Velkosklad;
+import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.RBTree;
 import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
@@ -75,6 +79,25 @@ public class Main {
             ex.printStackTrace();
         }
         
+        Importer importer = new Importer(new File("C:\\Users\\Unlink\\Desktop\\ExportedData"));
+        System.out.println(importer.importuj());
+        
+        System.out.println("Importované dáta");
+        for (Velkosklad importovaneSklady : importer.getImportovaneSklady()) {
+            System.out.println(importovaneSklady);
+        }
+        
+        for (Odberatel importovanyOdberatelia : importer.getImportovanyOdberatelia()) {
+            System.out.println(importovanyOdberatelia);
+        }
+        
+        for (Tovar importovaneTovary : importer.getImportovaneTovary()) {
+            System.out.println(importovaneTovary);
+        }
+        
+        for (Expedicia importovaneExpedicie : importer.getImportovaneExpedicie()) {
+            System.out.println(importovaneExpedicie);
+        }
         /*TreeIndexer porovnavacPodlaMena = new TreeIndexer() {
 
             @Override

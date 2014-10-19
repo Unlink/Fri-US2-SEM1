@@ -27,7 +27,7 @@ import sk.uniza.fri.duracik2.tree.RBTree;
  */
 public class Exporter {
 
-    private static final String COMMA = ",";
+    public static final String COMMA = ",";
 
     private File aOutputDirectory;
     
