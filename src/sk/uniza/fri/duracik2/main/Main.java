@@ -46,6 +46,8 @@ public class Main {
     
     public static void main(String[] args) {
         
+		System.out.println("Bla ble blix");
+		
         ExportnySystem s = new ExportnySystem();
         s.pridajVelkosklad(1, "Názov skladu 1", "Adresa skladu 1");
         s.pridajVelkosklad(2, "Názov skladu 2", "Adresa skladu 4");
