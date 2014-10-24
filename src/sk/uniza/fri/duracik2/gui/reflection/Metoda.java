@@ -5,6 +5,7 @@
  */
 package sk.uniza.fri.duracik2.gui.reflection;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.text.JTextComponent;
 import layout.SpringUtilities;
+import sk.uniza.fri.duracik2.gui.Parameter;
 
 /**
  *
@@ -84,24 +86,25 @@ public class Metoda implements Comparable<Metoda> {
 			if (aAnotacie.parametre().length > 1) {
 				labelTitle = aAnotacie.parametre()[i];
 			}
-			JLabel l = new JLabel(labelTitle, JLabel.TRAILING);
-			p.add(l);
+			/*JLabel l = new JLabel(labelTitle, JLabel.TRAILING);
+			p.add(l);*/
 			try {
 				Method m = this.getClass().getMethod(CREATE_LABEL_METHOD, parameterType);
 				JTextComponent componenet = (JTextComponent) m.invoke(this, (Object) null);
 				aParams.add(componenet);
-				l.setLabelFor(componenet);
-				p.add(componenet);
+				//l.setLabelFor(componenet);
+				//p.add(componenet);
+				p.add(new Parameter(labelTitle, componenet));
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
 				throw new ReflectorException("Nepodarilo sa vytvoriť panel pre metódu, chýba render metóda pre typ " + parameterType.getName() + "\n" + ex, ex);
 			}
 			i++;
 		}
-		p.add(new JLabel("", JLabel.TRAILING));
+		//p.add(new JLabel("", JLabel.TRAILING));
 		JButton ok = new JButton("Ok");
 		bindSubmitListnerer(ok);
 		p.add(ok);
-		SpringUtilities.makeCompactGrid(p,aParams.size()+1, 2, 3, 3, 3, 3);
+		//SpringUtilities.makeCompactGrid(p,aParams.size()+1, 2, 3, 3, 3, 3);
 		return p;
 	}
 
@@ -139,7 +142,8 @@ public class Metoda implements Comparable<Metoda> {
 	}
 	
 	public JTextComponent renderLabel() {
-		return new JTextField();
+		JTextField field = new JTextField();
+		return field;
 	}
 
 	public JTextComponent renderLabel(String dummy) {
