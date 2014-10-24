@@ -12,12 +12,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import sk.uniza.fri.duracik2.gui.reflection.Funkcia;
 import sk.uniza.fri.duracik2.io.Exporter;
 import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.RBTree;
-import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
 /**
  *
@@ -50,7 +48,8 @@ public class ExportnySystem {
      * @param count
      * @return 
      */
-    public List<Tovar> vyhľadajTovaryPodľaEanADatumu(int idSkladu, String eanKod, Date datSpotreby, int count) {
+	@Funkcia(id = 1, parametre = {"Identifikátor skladu", "Ean kód tovaru", "Dátum spotreby", "Počet tovarov"})
+    public List<Tovar> vyhladajTovaryPodlaEanADatumu(Integer idSkladu, String eanKod, Date datSpotreby, Integer count) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return null;
         
@@ -64,7 +63,8 @@ public class ExportnySystem {
      * @param eanKod
      * @return 
      */
-    public int vyhľadajTovaryPodľaEan(int idSkladu, String eanKod) {
+	@Funkcia(id = 2, parametre = {"Identifikátor skladu", "Ean kód tovaru"})
+    public int vyhladajTovaryPodlaEan(Integer idSkladu, String eanKod) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return -1;
         return sklad.spocitajPodlaEan(eanKod);
@@ -253,7 +253,8 @@ public class ExportnySystem {
      * @param adresa
      * @return 
      */
-    public boolean pridajVelkosklad(int idSkladu, String nazov, String adresa) {
+	@Funkcia(id = 14, parametre = {"Identifikátor skladu", "Názov skladu", "Adresa skladu"})
+    public boolean pridajVelkosklad(Integer idSkladu, String nazov, String adresa) {
         Velkosklad sklad = new Velkosklad(idSkladu, nazov, adresa);
         return aVelkosklady.insert(sklad);
     }
@@ -266,7 +267,8 @@ public class ExportnySystem {
      * @param adresa
      * @return 
      */
-    public boolean pridajOdberatela(int idSkladu, String idOdberatela, String nazov, String adresa) {
+	@Funkcia(id = 15, parametre = {"Identifikátor skladu", "Id odberatela", "Názov", "Adresa"})
+    public boolean pridajOdberatela(Integer idSkladu, String idOdberatela, String nazov, String adresa) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return false;
         Odberatel odberatel = new Odberatel(idOdberatela, sklad, nazov, adresa);
