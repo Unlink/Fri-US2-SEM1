@@ -35,17 +35,27 @@ public class Metoda implements Comparable<Metoda>
 	protected final String aName;
 	protected final Funkcia aAnotacie;
 	protected final Reflektor aReflektor;
-	protected final List<JTextComponent> aParams;
-	protected static final String CREATE_LABEL_METHOD = "renderLabel";
-	protected static final String VALIDATE_LABEL_METHOD = "validateLabel";
+	protected final FormGenerator aForm;
 
 	public Metoda(Reflektor paReflektor, Method paMetoda)
 	{
-		this.aParams = new ArrayList<>();
 		this.aReflektor = paReflektor;
 		this.aMetoda = paMetoda;
 		this.aAnotacie = paMetoda.getAnnotation(Funkcia.class);
 		this.aName = formatMethodName(paMetoda.getName());
+		ArrayList<Field> fields = new ArrayList<>();
+		int i = 0;
+		for (Class<?> parameterType : aMetoda.getParameterTypes())
+		{
+			String labelTitle = parameterType.toString();
+			if (aAnotacie.parametre().length > 1)
+			{
+				labelTitle = aAnotacie.parametre()[i];
+			}
+			i++;
+			fields.add(new Field(labelTitle, parameterType));
+		}
+		this.aForm = new FormGenerator(fields);
 	}
 
 	@Override
@@ -86,35 +96,9 @@ public class Metoda implements Comparable<Metoda>
 		return sb.toString();
 	}
 
-	public JPanel getInputPanel(JPanel p)
+	public JPanel getInputPanel()
 	{
-		aParams.clear();
-		int i = 0;
-		for (Class<?> parameterType : aMetoda.getParameterTypes())
-		{
-			String labelTitle = parameterType.toString();
-			if (aAnotacie.parametre().length > 1)
-			{
-				labelTitle = aAnotacie.parametre()[i];
-			}
-			JLabel l = new JLabel(labelTitle, JLabel.TRAILING);
-			p.add(l);
-			try
-			{
-				Method m = this.getClass().getMethod(CREATE_LABEL_METHOD, parameterType);
-				JTextComponent componenet = (JTextComponent) m.invoke(this, (Object) null);
-				aParams.add(componenet);
-				l.setLabelFor(componenet);
-				p.add(componenet);
-			}
-			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex)
-			{
-				throw new ReflectorException("Nepodarilo sa vytvoriť panel pre metódu, chýba render metóda pre typ " + parameterType.getName() + "\n" + ex, ex);
-			}
-			i++;
-		}
-		SpringUtilities.makeCompactGrid(p, aParams.size(), 2, 3, 3, 3, 3);
-		return p;
+		return aForm.getForm();
 	}
 
 	public void submitMethod()
@@ -122,23 +106,7 @@ public class Metoda implements Comparable<Metoda>
 		Object[] params = new Object[0];
 		try
 		{
-			params = new Object[aParams.size()];
-			int i = 0;
-			for (Class<?> parameterType : aMetoda.getParameterTypes())
-			{
-				try
-				{
-					Method m = Metoda.this.getClass().getMethod(VALIDATE_LABEL_METHOD, JTextComponent.class, parameterType);
-					params[i] = m.invoke(Metoda.this, aParams.get(i), (Object) null);
-
-				}
-				catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-				{
-					throw new ReflectorException("Nepodarilo sa validovať dáta pre metódu, chýba validate metóda pre typ " + parameterType.getName() + "\n" + ex, ex);
-				}
-				i++;
-			}
-			Object output = aMetoda.invoke(aReflektor.getObj(), params);
+			Object output = aMetoda.invoke(aReflektor.getObj(), aForm.getFormValues());
 			for (MethodExecuteListnerer l : (List<MethodExecuteListnerer>) aReflektor.getListnerers())
 			{
 				l.methodExecuted(aName, params, output);
@@ -156,40 +124,4 @@ public class Metoda implements Comparable<Metoda>
 			}
 		}
 	}
-
-	public JTextComponent renderLabel()
-	{
-		return new JTextField();
-	}
-
-	public JTextComponent renderLabel(String dummy)
-	{
-		return renderLabel();
-	}
-
-	public JTextComponent renderLabel(Integer dummy)
-	{
-		return renderLabel();
-	}
-
-	public JTextComponent renderLabel(Date dummy)
-	{
-		return renderLabel();
-	}
-
-	public String validateLabel(JTextComponent paComponent, String dummy)
-	{
-		return paComponent.getText();
-	}
-
-	public Integer validateLabel(JTextComponent paComponent, Integer dummy)
-	{
-		return Integer.parseInt(paComponent.getText());
-	}
-
-	public Date validateLabel(JTextComponent paComponent, Date dummy) throws ParseException
-	{
-		return new SimpleDateFormat("dd.mm.yyyy").parse(paComponent.getText());
-	}
-
 }

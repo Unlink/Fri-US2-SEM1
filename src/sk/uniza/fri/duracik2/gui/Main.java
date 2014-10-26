@@ -162,9 +162,7 @@ public class Main extends javax.swing.JFrame {
 	private void insertMethodPanel() {
 		Metoda selected = (Metoda) jComboBox1.getSelectedItem();
 		jPanel1.removeAll();
-		jPanel1.setLayout(new SpringLayout());
-		//jPanel1.add(selected.getInputPanel(jPanel1));
-		selected.getInputPanel(jPanel1);
+		jPanel1.add(selected.getInputPanel());
 		jScrollPane2.validate();
 		jPanel1.validate();
 		jPanel1.repaint();
