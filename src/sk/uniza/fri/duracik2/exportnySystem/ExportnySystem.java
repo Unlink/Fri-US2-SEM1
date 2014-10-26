@@ -12,7 +12,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JFileChooser;
 import sk.uniza.fri.duracik2.gui.reflection.Funkcia;
+import sk.uniza.fri.duracik2.gui.reflection.FunkciaParameter;
+import sk.uniza.fri.duracik2.gui.reflection.FunkciaParametre;
 import sk.uniza.fri.duracik2.io.Exporter;
 import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.RBTree;
@@ -77,7 +80,8 @@ public class ExportnySystem {
      * @param vyrobnyKod
      * @return 
      */
-    public Tovar vyhľadajTovar(long vyrobnyKod) {
+	@Funkcia(id = 3, parametre = {"Výrobný kód tovaru"})
+    public Tovar vyhladajTovar(long vyrobnyKod) {
         return aZoznamTovarov.findByParams(vyrobnyKod);
     }
     
@@ -104,7 +108,8 @@ public class ExportnySystem {
      * @param idOdberatela
      * @return 
      */
-    public Odberatel vyhľadajOdberateľa(int idSkladu, String idOdberatela) {
+	@Funkcia(id = 5, parametre = {"Identifikátor skladu", "Identifikátor odberaťela"})
+    public Odberatel vyhladajOdberatela(int idSkladu, String idOdberatela) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return null;
         return sklad.vyhladajOdberatela(idOdberatela);
@@ -120,7 +125,8 @@ public class ExportnySystem {
      * @param evcVozidla
      * @return 
      */
-    public boolean expedujTovarDoVeľkoskladu(int idSkladu, long idTovaru, int idCielovehoSkladu, Date datumPrichodu, String evcVozidla) {
+	@Funkcia(id = 6, parametre = {"Identifikátor skladu", "Výrobné číslo tovaru", "Identifikátor cieľového skladu", "Ocakávaný dátum príchodu", "Evidenčné číslo prepravcu"})
+    public boolean expedujTovarDoVelkoskladu(int idSkladu, long idTovaru, int idCielovehoSkladu, Date datumPrichodu, String evcVozidla) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return false;
         Velkosklad cielovySklad = vyhladajSklad(idCielovehoSkladu);
@@ -138,7 +144,8 @@ public class ExportnySystem {
      * @param evcVozidla
      * @return 
      */
-    public boolean expedujTovarKOdberateľovi(int idSkladu, long idTovaru, String idOdberatela, Date datumPrichodu, String evcVozidla) {
+	@Funkcia(id = 7, parametre = {"Identifikátor skladu", "Výrobné číslo tovaru", "Identifikátor odberaťela", "Ocakávaný dátum príchodu", "Evidenčné číslo prepravcu"})
+    public boolean expedujTovarKOdberatelovi(int idSkladu, long idTovaru, String idOdberatela, Date datumPrichodu, String evcVozidla) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return false;
         return sklad.exportujTovarKOdberatelovi(idTovaru, idOdberatela, datumPrichodu, evcVozidla);
@@ -151,7 +158,8 @@ public class ExportnySystem {
      * @param idTovaru
      * @return 
      */
-    public boolean vyložTovar(long idTovaru) {
+	@Funkcia(id = 8, parametre = {"Výrobné číslo tovaru"})
+    public boolean vylozTovar(long idTovaru) {
         Tovar tovar = aZoznamTovarov.findByParams(idTovaru);
         if (tovar == null || tovar.getPosExpZaznam() == null) return false;
         Velkosklad sklad = (Velkosklad) tovar.getPosExpZaznam().getZdroj();
@@ -169,7 +177,8 @@ public class ExportnySystem {
      * @param idSkladu
      * @return 
      */
-    public List<Odberatel> výpisOdberateľovSkladu(int idSkladu) {
+	@Funkcia(id = 9, parametre = {"Identifikátor skladu"})
+    public List<Odberatel> vypisOdberatelovSkladu(int idSkladu) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return null;
         List<Odberatel> odberatelia = new LinkedList<>();
@@ -186,7 +195,8 @@ public class ExportnySystem {
      * @param idSkladu
      * @return 
      */
-    public List<Tovar> výpisPráveExpedovanýchTovarov(int idSkladu) {
+	@Funkcia(id = 10, parametre = {"Identifikátor skladu"})
+    public List<Tovar> vypisPraveExpedovanychTovarov(int idSkladu) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return null;
         List<Tovar> tovary = new LinkedList<>();
@@ -205,7 +215,8 @@ public class ExportnySystem {
      * @param idOdberatela
      * @return 
      */
-    public List<Expedicia> výpisUskutocnenýchDodavok(int idSkladu, String idOdberatela) {
+	@Funkcia(id = 11, parametre = {"Identifikátor skladu", "Identofikátor odberateľa"})
+    public List<Expedicia> vypisUskutocnenychDodavok(int idSkladu, String idOdberatela) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return null;
         Odberatel odberatel = sklad.vyhladajOdberatela(idOdberatela);
@@ -223,7 +234,8 @@ public class ExportnySystem {
      * @param idSkladu
      * @return 
      */
-    public List<Expedicia> výpisUskotočnenýchDodávok(int idSkladu) {
+	@Funkcia(id = 12, parametre = {"Identifikátor skladu"})
+    public List<Expedicia> vypisUskotocnenychDodavok(int idSkladu) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return null;
         List<Expedicia> expedicie = new LinkedList<>();
@@ -241,7 +253,8 @@ public class ExportnySystem {
      * @param datum
      * @return 
      */
-    public List<Tovar> výpisTovarovSDátumomSpotreby(int idSkladu, Date datSpotreby) {
+	@Funkcia(id = 13, parametre = {"Identifikátor skladu", "Dátum spotreby"})
+    public List<Tovar> vypisTovarovSDatumomSpotreby(int idSkladu, Date datSpotreby) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return null;
         return sklad.vyhladajPodlaDatumuSpotreby(datSpotreby);
@@ -281,8 +294,9 @@ public class ExportnySystem {
      * @param idTovaru
      * @return 
      */
+	@Funkcia(id = 16, parametre = {"Výrobné číslo tovaru"})
     public boolean vyradTovar(long idTovaru) {
-        Tovar tovar = vyhľadajTovar(idTovaru);
+        Tovar tovar = vyhladajTovar(idTovaru);
         if (tovar == null) return false;
         AMiesto lokacia = tovar.getAktualnaLokacia();
         if (lokacia instanceof Velkosklad) {
@@ -298,6 +312,7 @@ public class ExportnySystem {
      * @param idSkladu
      * @return 
      */
+	@Funkcia(id = 17, parametre = {"Identifikátor skladu"})
     public List<Statistika> dajStatistiku(int idSkladu) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return null;
@@ -322,6 +337,7 @@ public class ExportnySystem {
      * @param idSkladu2
      * @return 
      */
+	@Funkcia(id = 18, parametre = {"Identifikátor skladu", "Identifikátor cieľového skladu"})
     public boolean zrusVelkosklad(int idSkladu, int idSkladu2) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return false;
@@ -339,6 +355,7 @@ public class ExportnySystem {
      * @param idOdberatela
      * @return 
      */
+	@Funkcia(id = 19, parametre = {"Identifikátor skladu", "Identifikátor odberateľa"})
     public boolean zrusOdberatela(int idSkladu, String idOdberatela) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return false;
@@ -349,6 +366,11 @@ public class ExportnySystem {
         return aVelkosklady.findByParams(idSkladu);
     }
     
+	@Funkcia(parametre = {"Zložka s dátami"})
+	@FunkciaParametre(parametre = {
+		@FunkciaParameter(param = 0,key = "JFileChooser.type", intValue = JFileChooser.OPEN_DIALOG),
+		@FunkciaParameter(param = 0, key = "JFileChooser.fileSelectionMode", intValue = JFileChooser.DIRECTORIES_ONLY)
+	})
     public boolean importujData(File paZlozka) {
         Importer importer = new Importer(paZlozka);
         if (!importer.importuj()) return false;
@@ -394,6 +416,11 @@ public class ExportnySystem {
         return true;
     }
     
+	@Funkcia(parametre = {"Zložka s dátami"})
+	@FunkciaParametre(parametre = {
+		@FunkciaParameter(param = 0,key = "JFileChooser.type", intValue = JFileChooser.SAVE_DIALOG),
+		@FunkciaParameter(param = 0, key = "JFileChooser.fileSelectionMode", intValue = JFileChooser.DIRECTORIES_ONLY)
+	})
     public boolean exportujData(File paZlozka) {
         Exporter exporter = new Exporter(paZlozka);
         try {

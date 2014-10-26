@@ -8,6 +8,7 @@ package sk.uniza.fri.duracik2.gui.reflection;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.JPanel;
 
@@ -35,12 +36,24 @@ public class Metoda implements Comparable<Metoda>
 		for (Class<?> parameterType : aMetoda.getParameterTypes())
 		{
 			String labelTitle = parameterType.toString();
-			if (aAnotacie.parametre().length > 1)
+			if (aAnotacie.parametre().length > 0)
 			{
 				labelTitle = aAnotacie.parametre()[i];
 			}
+			
+			if (aMetoda.getAnnotation(FunkciaParametre.class) != null) {
+				HashMap<String, FunkciaParameter> x = new HashMap<>();
+				for (FunkciaParameter p : aMetoda.getAnnotation(FunkciaParametre.class).parametre())
+				{
+					if (p.param() == i)
+						x.put(p.key(), p);
+				}
+				fields.add(new Field(labelTitle, parameterType, x));
+			}
+			else {
+				fields.add(new Field(labelTitle, parameterType));
+			}
 			i++;
-			fields.add(new Field(labelTitle, parameterType));
 		}
 		this.aForm = new FormGenerator(fields);
 	}
@@ -62,7 +75,7 @@ public class Metoda implements Comparable<Metoda>
 		StringBuilder sb = new StringBuilder();
 		if (aAnotacie.id() != -1)
 		{
-			sb.append(String.format("%2d ", aAnotacie.id()));
+			sb.append(String.format("%2d. ", aAnotacie.id()));
 		}
 		int x = 0;
 		for (char c : methodName.toCharArray())

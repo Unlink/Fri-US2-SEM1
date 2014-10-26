@@ -37,5 +37,13 @@ public class Statistika {
         aCount++;
         aSum+=paTovar.getCena();
     } 
+
+	@Override
+	public String toString()
+	{
+		return "{" + "aEan=" + aEan + ", aCount=" + aCount + ", aSum=" + aSum + '}';
+	}
+	
+	
     
 }

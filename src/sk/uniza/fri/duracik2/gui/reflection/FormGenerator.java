@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.text.JTextComponent;
-import layout.SpringUtilities;
+import sk.uniza.fri.duracik2.gui.SpringUtilities;
 
 /**
  *
@@ -35,7 +35,7 @@ public class FormGenerator
 		{
 			JLabel l = new JLabel(field.getName(), JLabel.TRAILING);
 			jp.add(l);
-			JComponent jc = BasicFormFields.getInstance().getRenderedComponent(field.getType());
+			JComponent jc = BasicFormFields.getInstance().getRenderedComponent(field);
 			jp.add(jc);
 			aComponents.add(jc);
 		}
@@ -47,7 +47,7 @@ public class FormGenerator
 		Object[] params = new Object[aFields.size()];
 		for (int i = 0; i < params.length; i++)
 		{
-			params[i] = BasicFormFields.getInstance().getData(aComponents.get(i), aFields.get(i).getType());
+			params[i] = BasicFormFields.getInstance().getData(aComponents.get(i), aFields.get(i));
 		}
 		return params;
 	}

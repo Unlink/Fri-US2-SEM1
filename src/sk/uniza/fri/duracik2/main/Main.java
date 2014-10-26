@@ -7,28 +7,13 @@
 package sk.uniza.fri.duracik2.main;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Stack;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import sk.uniza.fri.duracik2.exportnySystem.Expedicia;
-import sk.uniza.fri.duracik2.io.Exporter;
 import sk.uniza.fri.duracik2.exportnySystem.ExportnySystem;
-import sk.uniza.fri.duracik2.exportnySystem.Odberatel;
 import sk.uniza.fri.duracik2.exportnySystem.Tovar;
-import sk.uniza.fri.duracik2.exportnySystem.Velkosklad;
-import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.RBTree;
-import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
 /**
  *
@@ -66,12 +51,12 @@ public class Main {
         s.naskladniTovar(new Tovar(5L, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
         s.naskladniTovar(new Tovar(6L, "CC", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
         
-        s.expedujTovarDoVeľkoskladu(1, 1, 3, STD("20.10.2014"), "EVC1");
-        s.vyložTovar(1);
-        s.expedujTovarDoVeľkoskladu(3, 1, 2, STD("15.10.2014"), "EVC2");
-        s.vyložTovar(1);
-        s.expedujTovarKOdberateľovi(2, 1, "3", STD("15.10.2014"), "EVC3");
-        s.vyložTovar(1);
+        s.expedujTovarDoVelkoskladu(1, 1, 3, STD("20.10.2014"), "EVC1");
+        s.vylozTovar(1);
+        s.expedujTovarDoVelkoskladu(3, 1, 2, STD("15.10.2014"), "EVC2");
+        s.vylozTovar(1);
+        s.expedujTovarKOdberatelovi(2, 1, "3", STD("15.10.2014"), "EVC3");
+        s.vylozTovar(1);
         s.zrusOdberatela(2, "3");
         s.zrusVelkosklad(3, 4);
         

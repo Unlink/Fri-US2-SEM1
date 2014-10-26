@@ -5,6 +5,7 @@
  */
 package sk.uniza.fri.duracik2.gui.reflection;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -61,27 +62,27 @@ public class BasicFormFields
 		return aRenders.get(getObjType(paClass));
 	}
 
-	public JComponent getRenderedComponent(Class<?> paClass)
+	public JComponent getRenderedComponent(Field f)
 	{
-		Method m = getRender(paClass);
+		Method m = getRender(f.getType());
 		if (m != null)
 		{
 			try
 			{
-				return (JComponent) m.invoke(aInstance, new Object[0]);
+				return (JComponent) m.invoke(aInstance, f);
 			}
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
 			{
 				throw new ReflectorException("Nepodarilo sa vyvolať metódu", ex);
 			}
 		}
-		else if (hasAnotatedConstructor(paClass))
+		else if (hasAnotatedConstructor(f.getType()))
 		{
-			return new ReflectionalJTextField(paClass);
+			return new ReflectionalJTextField(f);
 		}
 		else
 		{
-			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená render metoda pre " + paClass.getName());
+			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená render metoda pre " + f.getType().getName());
 		}
 	}
 
@@ -90,14 +91,14 @@ public class BasicFormFields
 		return aValidators.get(getObjType(paClass));
 	}
 
-	public Object getData(JComponent paComponent, Class<?> paClass)
+	public Object getData(JComponent paComponent, Field f)
 	{
-		Method m = getValidator(paClass);
+		Method m = getValidator(f.getType());
 		if (m != null)
 		{
 			try
 			{
-				return m.invoke(aInstance, paComponent);
+				return m.invoke(aInstance, paComponent, f);
 			}
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
 			{
@@ -110,36 +111,47 @@ public class BasicFormFields
 		}
 		else
 		{
-			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená render metoda pre " + paClass.getName());
+			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená render metoda pre " + f.getType().getName());
 		}
 	}
 
 	@FormField(typ = {String.class, Integer.class, Double.class, Date.class, Long.class})
-	public JTextComponent renderBasic()
+	public JTextComponent renderBasic(Field paField)
 	{
 		return new JTextField();
 	}
+	
+	@FormField(typ = {File.class})
+	public JComponent renderFile(Field paField)
+	{
+		return new FileComponentField(paField);
+	}
 
-	public String validateString(JComponent paComponent)
+	public String validateString(JComponent paComponent, Field paField)
 	{
 		return ((JTextComponent) paComponent).getText();
 	}
 
-	public Integer validateInteger(JComponent paComponent)
+	public Integer validateInteger(JComponent paComponent, Field paField)
 	{
 		return Integer.parseInt(((JTextComponent) paComponent).getText());
 	}
 	
-	public Long validateLong(JComponent paComponent)
+	public Long validateLong(JComponent paComponent, Field paField)
 	{
 		return Long.parseLong(((JTextComponent) paComponent).getText());
 	}
 
-	public Date validateDate(JComponent paComponent) throws ParseException
+	public Date validateDate(JComponent paComponent, Field paField) throws ParseException
 	{
 		return new SimpleDateFormat("dd.mm.yyyy").parse(((JTextComponent) paComponent).getText());
 	}
 
+	public File validateFile(JComponent paComponent, Field paField) 
+	{
+		return ((FileComponentField) paComponent).getFile();
+	}
+	
 	private boolean hasAnotatedConstructor(Class<?> paClass)
 	{
 		for (Constructor<?> constructor : paClass.getConstructors())

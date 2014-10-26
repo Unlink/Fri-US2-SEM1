@@ -8,8 +8,6 @@ package sk.uniza.fri.duracik2.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.SpringLayout;
 import sk.uniza.fri.duracik2.exportnySystem.ExportnySystem;
 import sk.uniza.fri.duracik2.gui.reflection.MethodExecuteListnerer;
 import sk.uniza.fri.duracik2.gui.reflection.Metoda;
@@ -43,8 +41,17 @@ public class Main extends javax.swing.JFrame {
 
 			@Override
 			public void methodExecuted(String paName, Object[] paRams, Object paResult) {
-				jTextArea1.append(paName+":\n");
-				jTextArea1.append(paResult+"\n\n");
+				jTextArea1.append("> "+paName+"\n");
+				if (paResult instanceof Iterable) {
+					for (Object x : (Iterable) paResult)
+					{
+						jTextArea1.append("  "+x+"\n");
+					}
+					jTextArea1.append("\n");
+				}
+				else {
+					jTextArea1.append("  "+paResult+"\n\n");
+				}
 			}
 		});
 		setLocationRelativeTo(null);

@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JTextField;
@@ -29,9 +30,9 @@ public class ReflectionalJTextField extends JTextField
 	private Constructor<?> aConstructor;
 	private FormGenerator aFormGenerator;
 
-	public ReflectionalJTextField(Class<?> paTyp)
+	public ReflectionalJTextField(Field paField)
 	{
-		this.aTyp = paTyp;
+		this.aTyp = paField.getType();
 		FunkcnyKonstruktor anotacia = null;
 		for (Constructor<?> c : aTyp.getConstructors())
 		{
@@ -68,8 +69,19 @@ public class ReflectionalJTextField extends JTextField
 			{
 				labelTitle = anotacia.parametre()[i];
 			}
+			if (aConstructor.getAnnotation(FunkciaParametre.class) != null) {
+				HashMap<String, FunkciaParameter> x = new HashMap<>();
+				for (FunkciaParameter p : aConstructor.getAnnotation(FunkciaParametre.class).parametre())
+				{
+					if (p.param() == i)
+						x.put(p.key(), p);
+				}
+				fields.add(new Field(labelTitle, parameterType, x));
+			}
+			else {
+				fields.add(new Field(labelTitle, parameterType));
+			}
 			i++;
-			fields.add(new Field(labelTitle, parameterType));
 		}
 		aFormGenerator = new FormGenerator(fields);
 		aDialog = new KonstruktorDialog(aFormGenerator.getForm(), "Vytvor nový objekt " + aTyp.getSimpleName(), this);

@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
 
-package layout;
+package sk.uniza.fri.duracik2.gui;
 
 import javax.swing.*;
 import javax.swing.SpringLayout;
@@ -212,7 +212,13 @@ public class SpringUtilities {
                 SpringLayout.Constraints constraints =
                         getConstraintsForCell(r, c, parent, cols);
                 constraints.setY(y);
-                constraints.setHeight(height);
+				
+				if (parent.getComponent(r * c + c) instanceof JTextField) {
+					constraints.setY(Spring.sum(y, Spring.scale(Spring.sum(height, Spring.constant(-20)), 1/2f)));
+					constraints.setHeight(Spring.constant(20));
+				}
+				else 
+					constraints.setHeight(height);
             }
             y = Spring.sum(y, Spring.sum(height, Spring.constant(yPad)));
         }
