@@ -5,6 +5,7 @@
  */
 package sk.uniza.fri.duracik2.gui.reflection;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -26,12 +27,15 @@ public class BasicFormFields
 	private HashMap<Class<?>, Method> aValidators;
 	private static BasicFormFields aInstance;
 
-	public static BasicFormFields getInstance() {
+	public static BasicFormFields getInstance()
+	{
 		if (aInstance == null)
+		{
 			aInstance = new BasicFormFields();
+		}
 		return aInstance;
 	}
-	
+
 	private BasicFormFields()
 	{
 		aRenders = new HashMap<>();
@@ -54,17 +58,13 @@ public class BasicFormFields
 
 	public Method getRender(Class<?> paClass)
 	{
-		return aRenders.get(paClass);
+		return aRenders.get(getObjType(paClass));
 	}
 
 	public JComponent getRenderedComponent(Class<?> paClass)
 	{
 		Method m = getRender(paClass);
-		if (m == null)
-		{
-			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená render metoda pre " + paClass.getName());
-		}
-		else
+		if (m != null)
 		{
 			try
 			{
@@ -75,20 +75,25 @@ public class BasicFormFields
 				throw new ReflectorException("Nepodarilo sa vyvolať metódu", ex);
 			}
 		}
+		else if (hasAnotatedConstructor(paClass))
+		{
+			return new ReflectionalJTextField(paClass);
+		}
+		else
+		{
+			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená render metoda pre " + paClass.getName());
+		}
 	}
 
 	public Method getValidator(Class<?> paClass)
 	{
-		return aValidators.get(paClass);
+		return aValidators.get(getObjType(paClass));
 	}
-	
-	public Object getData(JComponent paComponent, Class<?> paClass) {
+
+	public Object getData(JComponent paComponent, Class<?> paClass)
+	{
 		Method m = getValidator(paClass);
-		if (m == null)
-		{
-			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená validate metoda pre " + paClass.getName());
-		}
-		else
+		if (m != null)
 		{
 			try
 			{
@@ -99,9 +104,17 @@ public class BasicFormFields
 				throw new ReflectorException("Nepodarilo sa vyvolať validačnú metódu", ex);
 			}
 		}
+		else if (paComponent instanceof ReflectionalJTextField)
+		{
+			return ((ReflectionalJTextField) paComponent).getObject();
+		}
+		else
+		{
+			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená render metoda pre " + paClass.getName());
+		}
 	}
 
-	@FormField(typ = {String.class, Integer.class, Double.class, Date.class})
+	@FormField(typ = {String.class, Integer.class, Double.class, Date.class, Long.class})
 	public JTextComponent renderBasic()
 	{
 		return new JTextField();
@@ -116,10 +129,42 @@ public class BasicFormFields
 	{
 		return Integer.parseInt(((JTextComponent) paComponent).getText());
 	}
+	
+	public Long validateLong(JComponent paComponent)
+	{
+		return Long.parseLong(((JTextComponent) paComponent).getText());
+	}
 
 	public Date validateDate(JComponent paComponent) throws ParseException
 	{
 		return new SimpleDateFormat("dd.mm.yyyy").parse(((JTextComponent) paComponent).getText());
+	}
+
+	private boolean hasAnotatedConstructor(Class<?> paClass)
+	{
+		for (Constructor<?> constructor : paClass.getConstructors())
+		{
+			if (constructor.getAnnotation(FunkcnyKonstruktor.class) != null)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Class<?> getObjType(Class<?> paClass)
+	{
+		switch (paClass.getName())
+		{
+			case "int":
+				return Integer.class;
+			case "double":
+				return Double.class;
+			case "long":
+				return Long.class;
+			default:
+				return paClass;
+		}
 	}
 
 }

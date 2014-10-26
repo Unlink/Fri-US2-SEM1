@@ -7,6 +7,8 @@ package sk.uniza.fri.duracik2.exportnySystem;
 
 import sk.uniza.fri.duracik2.io.IToCSV;
 import java.util.Date;
+import sk.uniza.fri.duracik2.gui.reflection.Funkcia;
+import sk.uniza.fri.duracik2.gui.reflection.FunkcnyKonstruktor;
 import sk.uniza.fri.duracik2.io.EObjectType;
 import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.TreeIndexer;
@@ -47,6 +49,7 @@ public class Tovar implements Comparable<Tovar>, IToCSV {
     private AMiesto aAktualnaLokacia;
     private Expedicia aPosExpZaznam;
 
+	@FunkcnyKonstruktor(parametre = {"Výrobné číslo", "Ean kód", "Dátum výroby", "Dátum spotreby", "Cena"})
     public Tovar(long paVyrobneCislo, String paEanKod, Date paDatumVyroby, Date paDatumSpotreby, int paCena) {
         this.aVyrobneCislo = paVyrobneCislo;
         this.aEanKod = paEanKod;
@@ -105,7 +108,7 @@ public class Tovar implements Comparable<Tovar>, IToCSV {
 
     @Override
     public String toString() {
-        return "Tovar{" + "aVyrobneCislo=" + aVyrobneCislo + ", aEanKod=" + aEanKod + ", aAktualnaLokacia=" + aAktualnaLokacia.getNazov() + ", aPosExpZaznam=" + ((aPosExpZaznam == null) ? "null" : aPosExpZaznam.getId()) + '}';
+        return "Tovar{" + "aVyrobneCislo=" + aVyrobneCislo + ", aEanKod=" + aEanKod + ", aAktualnaLokacia=" + (aAktualnaLokacia != null ? aAktualnaLokacia.getNazov() : "null") + ", aPosExpZaznam=" + ((aPosExpZaznam == null) ? "null" : aPosExpZaznam.getId()) + '}';
     }
 
     @Override

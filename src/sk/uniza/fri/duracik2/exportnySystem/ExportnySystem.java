@@ -87,6 +87,7 @@ public class ExportnySystem {
      * @param idSkladu
      * @return 
      */
+	@Funkcia(id = 4, parametre = {"Tovar", "Identifikátor skladu"})
     public boolean naskladniTovar(Tovar paTovar, int idSkladu) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
         if (sklad == null) return false;
@@ -254,7 +255,7 @@ public class ExportnySystem {
      * @return 
      */
 	@Funkcia(id = 14, parametre = {"Identifikátor skladu", "Názov skladu", "Adresa skladu"})
-    public boolean pridajVelkosklad(Integer idSkladu, String nazov, String adresa) {
+    public boolean pridajVelkosklad(int idSkladu, String nazov, String adresa) {
         Velkosklad sklad = new Velkosklad(idSkladu, nazov, adresa);
         return aVelkosklady.insert(sklad);
     }

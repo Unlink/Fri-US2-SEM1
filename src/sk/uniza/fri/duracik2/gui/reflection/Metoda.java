@@ -90,10 +90,11 @@ public class Metoda implements Comparable<Metoda>
 
 	public void submitMethod()
 	{
-		Object[] params = new Object[0];
+		Object[] params = null;
 		try
 		{
-			Object output = aMetoda.invoke(aReflektor.getObj(), aForm.getFormValues());
+			params = aForm.getFormValues();
+			Object output = aMetoda.invoke(aReflektor.getObj(), params);
 			for (MethodExecuteListnerer l : (List<MethodExecuteListnerer>) aReflektor.getListnerers())
 			{
 				l.methodExecuted(aName, params, output);
