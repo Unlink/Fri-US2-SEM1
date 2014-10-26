@@ -47,6 +47,7 @@ public class Main extends javax.swing.JFrame {
 				jTextArea1.append(paResult+"\n\n");
 			}
 		});
+		setLocationRelativeTo(null);
 	}
 
 	/**
@@ -68,6 +69,7 @@ public class Main extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Exportný systém");
 
         jLabel1.setText("Metóda:");
 
