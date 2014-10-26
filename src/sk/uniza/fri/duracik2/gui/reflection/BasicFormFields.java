@@ -22,21 +22,42 @@ import javax.swing.text.JTextComponent;
 public class BasicFormFields
 {
 
-	private static HashMap<Class<?>, Method> aRenders;
-	private static HashMap<Class<?>, Method> aValidators;
-	private static Class<? extends BasicFormFields> aRenderingClass = BasicFormFields.class;
+	private HashMap<Class<?>, Method> aRenders;
+	private HashMap<Class<?>, Method> aValidators;
 	private static BasicFormFields aInstance;
 
-	public static Method getRender(Class<?> paClass)
+	public static BasicFormFields getInstance() {
+		if (aInstance == null)
+			aInstance = new BasicFormFields();
+		return aInstance;
+	}
+	
+	private BasicFormFields()
 	{
-		if (aRenders == null)
+		aRenders = new HashMap<>();
+		aValidators = new HashMap<>();
+		for (Method method : this.getClass().getMethods())
 		{
-			reflectThis();
+			if (method.getName().startsWith("render"))
+			{
+				for (Class<?> t : method.getAnnotation(FormField.class).typ())
+				{
+					aRenders.put(t, method);
+				}
+			}
+			else if (method.getName().startsWith("validate"))
+			{
+				aValidators.put(method.getReturnType(), method);
+			}
 		}
+	}
+
+	public Method getRender(Class<?> paClass)
+	{
 		return aRenders.get(paClass);
 	}
 
-	public static JComponent getRenderedComponent(Class<?> paClass)
+	public JComponent getRenderedComponent(Class<?> paClass)
 	{
 		Method m = getRender(paClass);
 		if (m == null)
@@ -56,16 +77,12 @@ public class BasicFormFields
 		}
 	}
 
-	public static Method getValidator(Class<?> paClass)
+	public Method getValidator(Class<?> paClass)
 	{
-		if (aValidators == null)
-		{
-			reflectThis();
-		}
 		return aValidators.get(paClass);
 	}
 	
-	public static Object getData(JComponent paComponent, Class<?> paClass) {
+	public Object getData(JComponent paComponent, Class<?> paClass) {
 		Method m = getValidator(paClass);
 		if (m == null)
 		{
@@ -80,39 +97,6 @@ public class BasicFormFields
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
 			{
 				throw new ReflectorException("Nepodarilo sa vyvolať validačnú metódu", ex);
-			}
-		}
-	}
-
-	public static void setaRenderingClass(Class<? extends BasicFormFields> paRenderingClass)
-	{
-		aRenderingClass = paRenderingClass;
-	}
-
-	private static void reflectThis()
-	{
-		aRenders = new HashMap<>();
-		aValidators = new HashMap<>();
-		try
-		{
-			aInstance = aRenderingClass.newInstance();
-		}
-		catch (InstantiationException | IllegalAccessException ex)
-		{
-			throw new ReflectorException("Nepodarilo sa instanciovať classu", ex);
-		}
-		for (Method method : aRenderingClass.getMethods())
-		{
-			if (method.getName().startsWith("render"))
-			{
-				for (Class<?> t : method.getAnnotation(FormField.class).typ())
-				{
-					aRenders.put(t, method);
-				}
-			}
-			else if (method.getName().startsWith("validate"))
-			{
-				aValidators.put(method.getReturnType(), method);
 			}
 		}
 	}

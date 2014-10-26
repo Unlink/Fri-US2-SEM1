@@ -35,7 +35,7 @@ public class FormGenerator
 		{
 			JLabel l = new JLabel(field.getName(), JLabel.TRAILING);
 			jp.add(l);
-			JComponent jc = BasicFormFields.getRenderedComponent(field.getType());
+			JComponent jc = BasicFormFields.getInstance().getRenderedComponent(field.getType());
 			jp.add(jc);
 			aComponents.add(jc);
 		}
@@ -47,7 +47,7 @@ public class FormGenerator
 		Object[] params = new Object[aFields.size()];
 		for (int i = 0; i < params.length; i++)
 		{
-			params[i] = BasicFormFields.getData(aComponents.get(i), aFields.get(i).getType());
+			params[i] = BasicFormFields.getInstance().getData(aComponents.get(i), aFields.get(i).getType());
 		}
 		return params;
 	}
