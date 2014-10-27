@@ -5,6 +5,7 @@
  */
 package sk.uniza.fri.duracik2.gui;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
@@ -12,6 +13,7 @@ import sk.uniza.fri.duracik2.exportnySystem.ExportnySystem;
 import sk.uniza.fri.duracik2.gui.reflection.MethodExecuteListnerer;
 import sk.uniza.fri.duracik2.gui.reflection.Metoda;
 import sk.uniza.fri.duracik2.gui.reflection.Reflektor;
+import sk.uniza.fri.duracik2.gui.reflection.Tools;
 
 /**
  *
@@ -41,16 +43,19 @@ public class Main extends javax.swing.JFrame {
 
 			@Override
 			public void methodExecuted(String paName, Object[] paRams, Object paResult) {
-				jColorTextPane1.append("> "+paName+"\n");
+				jColorTextPane1.append(Color.BLUE.darker(), paName.trim()+"\n");
 				if (paResult instanceof Iterable) {
 					for (Object x : (Iterable) paResult)
 					{
-						jColorTextPane1.append("  "+x+"\n");
+						jColorTextPane1.append("> "+x+"\n");
 					}
 					jColorTextPane1.append("\n");
 				}
+				else if (paResult instanceof Exception) {
+					jColorTextPane1.append(Color.RED, "> "+Tools.getErrorMessage((Exception) paResult)+"\n\n");
+				}
 				else {
-					jColorTextPane1.append("  "+paResult+"\n\n");
+					jColorTextPane1.append("> "+paResult+"\n\n");
 				}
 			}
 		});
@@ -73,12 +78,14 @@ public class Main extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Exportný systém");
 
         jLabel1.setText("Metóda:");
 
+        jColorTextPane1.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
         jScrollPane1.setViewportView(jColorTextPane1);
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
@@ -88,6 +95,13 @@ public class Main extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Clear");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -105,7 +119,8 @@ public class Main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1)))
                 .addContainerGap())
         );
@@ -119,7 +134,9 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -132,6 +149,10 @@ public class Main extends javax.swing.JFrame {
     {//GEN-HEADEREND:event_jButton1ActionPerformed
         ((Metoda) jComboBox1.getSelectedItem()).submitMethod();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        jColorTextPane1.clear();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -171,6 +192,7 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private sk.uniza.fri.duracik2.gui.JColorTextPane jColorTextPane1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;

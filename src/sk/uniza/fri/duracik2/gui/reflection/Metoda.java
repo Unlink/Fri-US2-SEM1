@@ -18,8 +18,7 @@ import javax.swing.JPanel;
  *
  * @author Unlink
  */
-public class Metoda implements Comparable<Metoda>
-{
+public class Metoda implements Comparable<Metoda> {
 
 	protected final Method aMetoda;
 	protected final String aName;
@@ -27,28 +26,25 @@ public class Metoda implements Comparable<Metoda>
 	protected final Reflektor aReflektor;
 	protected final FormGenerator aForm;
 
-	public Metoda(Reflektor paReflektor, Method paMetoda)
-	{
+	public Metoda(Reflektor paReflektor, Method paMetoda) {
 		this.aReflektor = paReflektor;
 		this.aMetoda = paMetoda;
 		this.aAnotacie = paMetoda.getAnnotation(Funkcia.class);
 		this.aName = formatMethodName(paMetoda.getName());
 		ArrayList<Field> fields = new ArrayList<>();
 		int i = 0;
-		for (Class<?> parameterType : aMetoda.getParameterTypes())
-		{
+		for (Class<?> parameterType : aMetoda.getParameterTypes()) {
 			String labelTitle = parameterType.toString();
-			if (aAnotacie.parametre().length > 0)
-			{
+			if (aAnotacie.parametre().length > 0) {
 				labelTitle = aAnotacie.parametre()[i];
 			}
-			
+
 			if (aMetoda.getAnnotation(FunkciaParametre.class) != null) {
 				HashMap<String, FunkciaParameter> x = new HashMap<>();
-				for (FunkciaParameter p : aMetoda.getAnnotation(FunkciaParametre.class).parametre())
-				{
-					if (p.param() == i)
+				for (FunkciaParameter p : aMetoda.getAnnotation(FunkciaParametre.class).parametre()) {
+					if (p.param() == i) {
 						x.put(p.key(), p);
+					}
 				}
 				fields.add(new Field(labelTitle, parameterType, x));
 			}
@@ -61,80 +57,57 @@ public class Metoda implements Comparable<Metoda>
 	}
 
 	@Override
-	public int compareTo(Metoda paO)
-	{
+	public int compareTo(Metoda paO) {
 		return aName.compareTo(paO.aName);
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return aName;
 	}
 
-	private String formatMethodName(String methodName)
-	{
+	private String formatMethodName(String methodName) {
 		StringBuilder sb = new StringBuilder();
-		if (aAnotacie.id() != -1)
-		{
+		if (aAnotacie.id() != -1) {
 			sb.append(String.format("%2d. ", aAnotacie.id()));
 		}
 		int x = 0;
-		for (char c : methodName.toCharArray())
-		{
-			if (++x == 1)
-			{
+		for (char c : methodName.toCharArray()) {
+			if (++x == 1) {
 				sb.append(Character.toUpperCase(c));
 			}
-			else if (Character.isUpperCase(c))
-			{
+			else if (Character.isUpperCase(c)) {
 				sb.append(' ').append(Character.toLowerCase(c));
 			}
-			else
-			{
+			else {
 				sb.append(c);
 			}
 		}
 		return sb.toString();
 	}
 
-	public JPanel getInputPanel()
-	{
+	public JPanel getInputPanel() {
 		return aForm.getForm();
 	}
 
-	public void submitMethod()
-	{
+	public void submitMethod() {
 		Object[] params = null;
-		try
-		{
+		try {
 			params = aForm.getFormValues();
 			Object output = aMetoda.invoke(aReflektor.getObj(), params);
-			for (MethodExecuteListnerer l : (List<MethodExecuteListnerer>) aReflektor.getListnerers())
-			{
+			for (MethodExecuteListnerer l : (List<MethodExecuteListnerer>) aReflektor.getListnerers()) {
 				l.methodExecuted(aName, params, output);
 			}
 		}
 		/*catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-		{
-			throw new ReflectorException("Nepodarilo sa vykonať metódu\n" + ex, ex);
-		}*/
-		catch (Exception ex)
-		{
-			for (MethodExecuteListnerer l : (List<MethodExecuteListnerer>) aReflektor.getListnerers())
-			{
-				l.methodExecuted(aName, params, getErrorMessage(ex));
+		 {
+		 throw new ReflectorException("Nepodarilo sa vykonať metódu\n" + ex, ex);
+		 }*/
+		catch (Exception ex) {
+			for (MethodExecuteListnerer l : (List<MethodExecuteListnerer>) aReflektor.getListnerers()) {
+				l.methodExecuted(aName, params, ex);
 			}
 		}
 	}
-	
-	
-	public static String getErrorMessage(Exception ex) {
-		ex.printStackTrace();
-		Throwable e = ex;
-		while (e.getCause() != null) {
-			e = e.getCause();
-		}
-		return e.getMessage();
-	}
+
 }
