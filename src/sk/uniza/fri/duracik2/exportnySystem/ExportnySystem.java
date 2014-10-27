@@ -54,7 +54,7 @@ public class ExportnySystem {
 	@Funkcia(id = 1, parametre = {"Identifikátor skladu", "Ean kód tovaru", "Dátum spotreby", "Počet tovarov"})
     public List<Tovar> vyhladajTovaryPodlaEanADatumu(Integer idSkladu, String eanKod, Date datSpotreby, Integer count) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
-        if (sklad == null) return null;
+        if (sklad == null) throw new IllegalArgumentException("Nepodarilo sa nájsť sklad s ID "+idSkladu);
         
         return sklad.vyhladajPodlaEanADatumu(eanKod, datSpotreby, count);
     }

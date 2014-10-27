@@ -103,7 +103,7 @@ public class KonstruktorDialog extends javax.swing.JDialog {
 			this.setVisible(false);
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage(), "Chyba pri vytváraní objektu", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, Metoda.getErrorMessage(ex), "Chyba pri vytváraní objektu", JOptionPane.ERROR_MESSAGE);
 		}
     }//GEN-LAST:event_jButton1ActionPerformed
 

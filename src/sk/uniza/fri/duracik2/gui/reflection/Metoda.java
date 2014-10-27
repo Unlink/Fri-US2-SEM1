@@ -10,6 +10,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 /**
@@ -113,16 +115,26 @@ public class Metoda implements Comparable<Metoda>
 				l.methodExecuted(aName, params, output);
 			}
 		}
-		catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
+		/*catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
 		{
 			throw new ReflectorException("Nepodarilo sa vykonať metódu\n" + ex, ex);
-		}
-		catch (RuntimeException ex)
+		}*/
+		catch (Exception ex)
 		{
 			for (MethodExecuteListnerer l : (List<MethodExecuteListnerer>) aReflektor.getListnerers())
 			{
-				l.methodExecuted(aName, params, ex.getMessage());
+				l.methodExecuted(aName, params, getErrorMessage(ex));
 			}
 		}
+	}
+	
+	
+	public static String getErrorMessage(Exception ex) {
+		ex.printStackTrace();
+		Throwable e = ex;
+		while (e.getCause() != null) {
+			e = e.getCause();
+		}
+		return e.getMessage();
 	}
 }

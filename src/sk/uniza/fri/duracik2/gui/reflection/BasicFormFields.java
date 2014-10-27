@@ -6,6 +6,7 @@
 package sk.uniza.fri.duracik2.gui.reflection;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -134,21 +135,39 @@ public class BasicFormFields
 
 	public Integer validateInteger(JComponent paComponent, Field paField)
 	{
-		return Integer.parseInt(((JTextComponent) paComponent).getText());
+		try {
+			return Integer.parseInt(((JTextComponent) paComponent).getText());
+		}
+		catch (NumberFormatException ex) {
+			throw new NumberFormatException("Nesprávny číselný vstup pre pole "+paField.getName());
+		}
 	}
 	
 	public Long validateLong(JComponent paComponent, Field paField)
 	{
-		return Long.parseLong(((JTextComponent) paComponent).getText());
+		try {
+			return Long.parseLong(((JTextComponent) paComponent).getText());
+		}
+		catch (NumberFormatException ex) {
+			throw new NumberFormatException("Nesprávny číselný vstup pre pole "+paField.getName());
+		}
 	}
 
 	public Date validateDate(JComponent paComponent, Field paField) throws ParseException
 	{
-		return new SimpleDateFormat("dd.mm.yyyy").parse(((JTextComponent) paComponent).getText());
+		try {
+			return new SimpleDateFormat("dd.mm.yyyy").parse(((JTextComponent) paComponent).getText());
+		}
+		catch (ParseException ex) {
+			throw new ParseException("Nepodarilo sa načítať dátum z pola "+paField.getName(), ex.getErrorOffset());
+		}
 	}
 
-	public File validateFile(JComponent paComponent, Field paField) 
+	public File validateFile(JComponent paComponent, Field paField) throws FileNotFoundException 
 	{
+		if (((FileComponentField) paComponent).getFile() == null) {
+			throw new FileNotFoundException("Nepodarilo sa nájsť súbor z poľa "+paField.getName());
+		}
 		return ((FileComponentField) paComponent).getFile();
 	}
 	

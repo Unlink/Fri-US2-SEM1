@@ -41,16 +41,16 @@ public class Main extends javax.swing.JFrame {
 
 			@Override
 			public void methodExecuted(String paName, Object[] paRams, Object paResult) {
-				jTextArea1.append("> "+paName+"\n");
+				jColorTextPane1.append("> "+paName+"\n");
 				if (paResult instanceof Iterable) {
 					for (Object x : (Iterable) paResult)
 					{
-						jTextArea1.append("  "+x+"\n");
+						jColorTextPane1.append("  "+x+"\n");
 					}
-					jTextArea1.append("\n");
+					jColorTextPane1.append("\n");
 				}
 				else {
-					jTextArea1.append("  "+paResult+"\n\n");
+					jColorTextPane1.append("  "+paResult+"\n\n");
 				}
 			}
 		});
@@ -64,13 +64,12 @@ public class Main extends javax.swing.JFrame {
 	 */
 	@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jColorTextPane1 = new sk.uniza.fri.duracik2.gui.JColorTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -80,19 +79,14 @@ public class Main extends javax.swing.JFrame {
 
         jLabel1.setText("Metóda:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jScrollPane1.setViewportView(jColorTextPane1);
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
         jScrollPane2.setViewportView(jPanel1);
 
         jButton1.setText("Vykonaj");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -177,11 +171,11 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private sk.uniza.fri.duracik2.gui.JColorTextPane jColorTextPane1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
