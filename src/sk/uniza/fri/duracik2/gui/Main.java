@@ -8,7 +8,12 @@ package sk.uniza.fri.duracik2.gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+import javax.swing.SwingWorker;
 import sk.uniza.fri.duracik2.exportnySystem.ExportnySystem;
 import sk.uniza.fri.duracik2.gui.reflection.MethodExecuteListnerer;
 import sk.uniza.fri.duracik2.gui.reflection.Metoda;
@@ -23,6 +28,7 @@ public class Main extends javax.swing.JFrame {
 
 	private ExportnySystem aExportnySystem;
 	private Reflektor<ExportnySystem> aReflektor;
+	private Icon aSpinner = new javax.swing.ImageIcon(getClass().getResource("/sk/uniza/fri/duracik2/gui/ajax-loader.gif")); // NOI18N
 
 	/**
 	 * Creates new form Main
@@ -42,45 +48,52 @@ public class Main extends javax.swing.JFrame {
 		aReflektor.addExecutionListnerer(new MethodExecuteListnerer() {
 
 			@Override
-			public void methodExecuted(String paName, Object[] paRams, Object paResult) {
-				jColorTextPane1.append(Color.BLUE.darker(), paName.trim()+"\n", JColorTextPane.TYPE_UNDERLINE | JColorTextPane.TYPE_BOLD);
-				if (paResult instanceof Iterable) {
-					for (Object x : (Iterable) paResult)
-					{
-						vypis(x);
-						jColorTextPane1.append("\n");
+			public void methodExecuted(final String paName, final Object[] paRams, final Object paResult) {
+				java.awt.EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						jColorTextPane1.append(Color.BLUE.darker(), paName.trim() + "\n", JColorTextPane.TYPE_UNDERLINE | JColorTextPane.TYPE_BOLD);
+						if (paResult instanceof Iterable) {
+							for (Object x : (Iterable) paResult) {
+								vypis(x);
+								jColorTextPane1.append("\n");
+							}
+							jColorTextPane1.append("\n");
+						}
+						else if (paResult instanceof Exception) {
+							jColorTextPane1.append(Color.RED, "> " + Tools.getErrorMessage((Exception) paResult) + "\n\n");
+						}
+						else {
+							vypis(paResult);
+							jColorTextPane1.append("\n");
+						}
 					}
-					jColorTextPane1.append("\n");
-				}
-				else if (paResult instanceof Exception) {
-					jColorTextPane1.append(Color.RED, "> "+Tools.getErrorMessage((Exception) paResult)+"\n\n");
-				}
-				else {
-					vypis(paResult);
-					jColorTextPane1.append("\n");
-				}
+				});
 			}
 		});
+
 		setLocationRelativeTo(null);
 	}
-	
+
 	private void vypis(Object obj) {
 		if (obj instanceof IGuiPrint) {
-			((IGuiPrint)obj).print(jColorTextPane1);
+			((IGuiPrint) obj).print(jColorTextPane1);
 		}
 		else if (obj instanceof Boolean) {
 			boolean val = (Boolean) obj;
 			jColorTextPane1.append("> ");
-			if (val) 
+			if (val) {
 				jColorTextPane1.append(Color.GREEN.darker().darker(), "OK");
-			else 
+			}
+			else {
 				jColorTextPane1.append(Color.RED, "Chyba");
+			}
 		}
 		else if (obj == null) {
 			jColorTextPane1.append("> null\n");
 		}
 		else {
-			jColorTextPane1.append("> "+obj.toString()+"\n");
+			jColorTextPane1.append("> " + obj.toString() + "\n");
 		}
 	}
 
@@ -101,6 +114,7 @@ public class Main extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Exportný systém");
@@ -127,6 +141,8 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -143,6 +159,8 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
                 .addContainerGap())
         );
@@ -158,7 +176,8 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
                 .addContainerGap())
@@ -169,11 +188,34 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
-        ((Metoda) jComboBox1.getSelectedItem()).submitMethod();
+		jButton1.setIcon(aSpinner);
+		jButton1.setEnabled(false);
+		jLabel2.setText("");
+		new SwingWorker<Long, Double>() {
+
+			@Override
+			protected Long doInBackground() throws Exception {
+				long begin = System.nanoTime();
+				((Metoda) jComboBox1.getSelectedItem()).submitMethod();
+				return System.nanoTime()- begin;
+			}
+
+			@Override
+			protected void done() {
+				jButton1.setIcon(null);
+				jButton1.setEnabled(true);
+				try {
+					jLabel2.setText(String.format("%.3f ms", get()/1000000.0d));
+				}
+				catch (InterruptedException | ExecutionException ex) {
+				}
+			}
+
+		}.execute();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        jColorTextPane1.clear();
+		jColorTextPane1.clear();
     }//GEN-LAST:event_jButton2ActionPerformed
 
 	/**
@@ -184,13 +226,17 @@ public class Main extends javax.swing.JFrame {
 		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException ex) {
+		}
+		catch (ClassNotFoundException ex) {
 			java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
+		}
+		catch (InstantiationException ex) {
 			java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
+		}
+		catch (IllegalAccessException ex) {
 			java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+		}
+		catch (javax.swing.UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 		//</editor-fold>
@@ -218,6 +264,7 @@ public class Main extends javax.swing.JFrame {
     private sk.uniza.fri.duracik2.gui.JColorTextPane jColorTextPane1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
