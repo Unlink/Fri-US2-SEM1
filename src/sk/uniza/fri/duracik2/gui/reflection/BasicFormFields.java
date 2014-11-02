@@ -25,8 +25,8 @@ import javax.swing.text.JTextComponent;
 public class BasicFormFields
 {
 
-	private HashMap<Class<?>, Method> aRenders;
-	private HashMap<Class<?>, Method> aValidators;
+	private final HashMap<Class<?>, Method> aRenders;
+	private final HashMap<Class<?>, Method> aValidators;
 	private static BasicFormFields aInstance;
 
 	public static BasicFormFields getInstance()
@@ -139,7 +139,7 @@ public class BasicFormFields
 			return Integer.parseInt(((JTextComponent) paComponent).getText());
 		}
 		catch (NumberFormatException ex) {
-			throw new NumberFormatException("Nesprávny číselný vstup pre pole "+paField.getName());
+			throw new NumberFormatException("Nesprávny číselný vstup pre pole "+paField.getName()+" - zadané: \""+((JTextComponent) paComponent).getText()+"\"");
 		}
 	}
 	

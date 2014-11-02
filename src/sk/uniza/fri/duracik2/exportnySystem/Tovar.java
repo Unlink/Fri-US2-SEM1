@@ -5,9 +5,12 @@
  */
 package sk.uniza.fri.duracik2.exportnySystem;
 
+import java.awt.Color;
+import java.text.SimpleDateFormat;
 import sk.uniza.fri.duracik2.io.IToCSV;
 import java.util.Date;
-import sk.uniza.fri.duracik2.gui.reflection.Funkcia;
+import sk.uniza.fri.duracik2.gui.IGuiPrint;
+import sk.uniza.fri.duracik2.gui.JColorTextPane;
 import sk.uniza.fri.duracik2.gui.reflection.FunkcnyKonstruktor;
 import sk.uniza.fri.duracik2.io.EObjectType;
 import sk.uniza.fri.duracik2.io.Importer;
@@ -17,7 +20,7 @@ import sk.uniza.fri.duracik2.tree.TreeIndexer;
  *
  * @author Unlink
  */
-public class Tovar implements Comparable<Tovar>, IToCSV {
+public class Tovar implements Comparable<Tovar>, IToCSV, IGuiPrint {
 
     public static final TreeIndexer<Tovar> INDEXER = new TreeIndexer<Tovar>() {
         @Override
@@ -135,6 +138,35 @@ public class Tovar implements Comparable<Tovar>, IToCSV {
         aPosExpZaznam = (paAtrrs.length == 7 && !paAtrrs[6].isEmpty()) ? paImporter.getExpedicia(Long.parseLong(paAtrrs[6])) : null;
 
     }
+
+	@Override
+	public void print(JColorTextPane pane) {
+		SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy");
+		pane.append("Tovar");
+		pane.append("\n Ean: ");
+		pane.append(Color.BLUE, aEanKod);
+		pane.append("\n Cena: ");
+		pane.append(Color.BLUE, aCena+"");
+		pane.append("\n Vyrobny kod: ");
+		pane.append(Color.BLUE, aVyrobneCislo+"");
+		pane.append("\n Lokácia: ");
+		if (aAktualnaLokacia == null) {
+			pane.append(Color.RED, "N/A");
+		}
+		else if (aAktualnaLokacia instanceof Odberatel) {
+			pane.append(Color.GREEN.darker().darker(), aAktualnaLokacia.getNazov());
+		}
+		else {
+			pane.append(Color.BLUE, aAktualnaLokacia.getNazov());
+		}
+		pane.append("\n Dátum výroby/spotreby: ");
+		pane.append(Color.BLUE, format.format(aDatumVyroby)+"/"+format.format(aDatumSpotreby));
+		if (aPosExpZaznam != null && aAktualnaLokacia == aPosExpZaznam.getZdroj()) {
+			pane.append(Color.GREEN, "\n Tovar je expedovaný: ");
+			pane.append(Color.BLACK, "\n  EVC prepravcu: ");
+			pane.append(Color.BLUE, aPosExpZaznam.getEvcPrepravcu());
+		}
+	}
     
     
 

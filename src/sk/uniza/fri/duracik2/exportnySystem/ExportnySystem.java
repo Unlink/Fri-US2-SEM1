@@ -69,7 +69,7 @@ public class ExportnySystem {
 	@Funkcia(id = 2, parametre = {"Identifikátor skladu", "Ean kód tovaru"})
     public int vyhladajTovaryPodlaEan(Integer idSkladu, String eanKod) {
         Velkosklad sklad = vyhladajSklad(idSkladu);
-        if (sklad == null) return -1;
+        if (sklad == null) throw new IllegalArgumentException("Nepodarilo sa nájsť sklad s ID "+idSkladu);
         return sklad.spocitajPodlaEan(eanKod);
     }
     

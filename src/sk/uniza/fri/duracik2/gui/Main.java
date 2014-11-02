@@ -43,7 +43,7 @@ public class Main extends javax.swing.JFrame {
 
 			@Override
 			public void methodExecuted(String paName, Object[] paRams, Object paResult) {
-				jColorTextPane1.append(Color.BLUE.darker(), paName.trim()+"\n");
+				jColorTextPane1.append(Color.BLUE.darker(), paName.trim()+"\n", JColorTextPane.TYPE_UNDERLINE | JColorTextPane.TYPE_BOLD);
 				if (paResult instanceof Iterable) {
 					for (Object x : (Iterable) paResult)
 					{
@@ -66,6 +66,14 @@ public class Main extends javax.swing.JFrame {
 	private void vypis(Object obj) {
 		if (obj instanceof IGuiPrint) {
 			((IGuiPrint)obj).print(jColorTextPane1);
+		}
+		else if (obj instanceof Boolean) {
+			boolean val = (Boolean) obj;
+			jColorTextPane1.append("> ");
+			if (val) 
+				jColorTextPane1.append(Color.GREEN.darker().darker(), "OK");
+			else 
+				jColorTextPane1.append(Color.RED, "Chyba");
 		}
 		else {
 			jColorTextPane1.append("> "+obj.toString()+"\n");
@@ -148,7 +156,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

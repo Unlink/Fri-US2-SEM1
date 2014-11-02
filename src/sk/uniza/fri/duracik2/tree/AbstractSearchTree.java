@@ -230,8 +230,8 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         final Object[] pFrom = new Object[params.length / 2];
         final Object[] pTo = new Object[params.length / 2];
         for (int i = 0; i < params.length; i+=2) {
-            pFrom[i] = params[i];
-            pTo[i] = params[i+1];
+            pFrom[i/2] = params[i];
+            pTo[i/2] = params[i+1];
         }
         
         Node begin = findLower(pFrom);

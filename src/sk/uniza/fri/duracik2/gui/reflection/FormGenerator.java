@@ -30,6 +30,7 @@ public class FormGenerator
 	}
 	
 	public JPanel getForm() {
+		aComponents.clear();
 		JPanel jp = new JPanel(new SpringLayout());
 		for (Field field : aFields)
 		{
