@@ -51,7 +51,7 @@ public class Generator {
 						break;
 					}
 					else {	
-						int sklad = randomBetweenAndNot(0, pocetSkladov, idSkladu);
+						int sklad = randomBetweenAndNot(0, Math.max(0, pocetSkladov-1), idSkladu);
 						sys.expedujTovarDoVelkoskladu(idSkladu, t.getVyrobneCislo(), sklad, randomDate(t.getDatumVyroby(), t.getDatumSpotreby()), randomString(2)+" "+randomString(3)+" "+randomString(2));
 						if (rg.nextDouble() < 0.5) {
 							sys.vylozTovar(t.getVyrobneCislo());
