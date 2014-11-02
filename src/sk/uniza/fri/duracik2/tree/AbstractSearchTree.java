@@ -57,14 +57,6 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
                 return aOtec.aLavy;
         }
         
-        public boolean isLeftSon(Node paNode) {
-            return aLavy == paNode;
-        }
-        
-        public boolean isRightSon(Node paNode) {
-            return aPravy == paNode;
-        }
-        
         public boolean amILeft() {
             if (aOtec == null)
                 return false;
@@ -77,6 +69,10 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
             return aOtec.aPravy == this;
         }
         
+		/**
+		 * Vykreslenie podstromu daného uzla
+		 * Zdroj: http://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
+		 */
         public void print() {
             print("", true);
         }
@@ -90,7 +86,7 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         }
         
         protected String nodeToString() {
-            return ((aOtec != null && aOtec.isLeftSon(this)) ? 'L' : 'R') + aPrvok.toString();
+            return ((aOtec != null && amILeft()) ? 'L' : 'R') + aPrvok.toString();
         }
     }
     
@@ -147,6 +143,11 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         return findByParams(paPrvok);
     }
     
+	/**
+	 * Overí či prvok je v strome
+	 * @param paPrvok
+	 * @return 
+	 */
     public boolean contains(E paPrvok) {
         return find(paPrvok) != null;
     }
@@ -166,6 +167,11 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         }
     }
     
+	/**
+	 * Nájde najmenší prvok vyhovujúci parametrom
+	 * @param params
+	 * @return 
+	 */
     protected Node findLower(Object... params) {
         Node uzol = searchTree(params);
         if (uzol == null) {
@@ -182,6 +188,11 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         }
     }
     
+	/**
+	 * Nájde všetky prvky, ktoré vyhovujú parametrom
+	 * @param params
+	 * @return 
+	 */
     public Iterator<E> findAll(final Object... params) {
         final Node clousure = findLower(params);
         return new Iterator<E>() {
@@ -205,6 +216,13 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         };
     }
     
+	/**
+	 * Nájde rozsah
+	 * Parametre sa zadávajú
+	 * param1od, param1do, param2od, param2do,...
+	 * @param params
+	 * @return 
+	 */
     public Iterator<E> findRange(final Object... params) {
         if (params.length%2 != 0) {
             throw new IllegalArgumentException();
@@ -269,6 +287,11 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         return null;
     }
     
+	/**
+	 * Vloží prvok do stromu na misesto podĺa princípu BVS
+	 * @param paNode
+	 * @return 
+	 */
     protected boolean insertNode(Node paNode) {
         Node dummyNode = searchTree(paNode.aPrvok);
         //Strom je prázdny
@@ -302,6 +325,12 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
     *              /   \                               /   \
     *             B     C                             A     B
     */
+	
+	/**
+	 * Pravá rotácia okolo vrcholu X
+	 * Referenica na X sa nemení!
+	 * @param x 
+	 */
     protected void rotate_left(Node x) {
         Node y = x.aPravy;
         E data = x.aPrvok;
@@ -314,6 +343,11 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         x.setLeft(y);  
     }
     
+	/**
+	 * Ľavá rotácia okolo vrcholu X
+	 * Referenica na X sa nemení!
+	 * @param x 
+	 */
     protected void rotate_right(Node y) {
         Node x = y.aLavy;
         E data = x.aPrvok;
@@ -378,6 +412,10 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         }
     }
     
+	/**
+	 * In order prehliadka
+	 * @return 
+	 */
     public Iterator<E> inOrderIterator() {
         Node uzol = aVrchol;
         while (uzol != null && uzol.aLavy != null) {
@@ -409,6 +447,10 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         };
     }
     
+	/**
+	 * Lever order prehliadka
+	 * @return 
+	 */
     public Iterator<E> levelOrderIterator() {
         final LinkedList<Node> zasobnik = new LinkedList<>();
         if (aVrchol != null)
@@ -434,8 +476,7 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
             }
 
             @Override
-            public void remove() {
-                
+            public void remove() {   
             }
         };
     }
@@ -445,6 +486,10 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
         return inOrderIterator();
     }
 
+	/**
+	 * Vykreslí strom
+	 * @see Node.print
+	 */
     public void printTree() {
         if(aVrchol != null) {
             aVrchol.print();

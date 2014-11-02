@@ -25,7 +25,7 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
 
         public RBNode(E aPrvok) {
             super(aPrvok);
-            aFarba = Colour.BLACK;
+            aFarba = BLACK;
         }
 
         /**
@@ -39,19 +39,20 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
                 return null;
             }
             else {
-                RBNode node = (RBNode) getBrother();
+                /*RBNode node = (RBNode) getBrother();
                 if (node == null) {
-                    return Colour.BLACK;
+                    return BLACK;
                 }
                 else {
                     return node.aFarba;
-                }
+                }*/
+				return colorOf(getBrother());
             }
         }
 
         @Override
         protected String nodeToString() {
-            return super.nodeToString() + ((aFarba == Colour.BLACK) ? "b" : "r");
+            return super.nodeToString() + ((aFarba == BLACK) ? "b" : "r");
         }
 
     }
@@ -64,6 +65,11 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
         super(aIndexer);
     }
 
+	/**
+	 * Vloží prvok do stromu
+	 * @param paData
+	 * @return false, ak sa už v strome nachádza
+	 */
     public boolean insert(E paData) {
         RBNode newnode = new RBNode(paData);
         if (!insertNode(newnode)) {
@@ -75,7 +81,7 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
         else {
             newnode.aFarba = RED;
             RBNode uzol = (RBNode) newnode.aOtec;
-            while (uzol.aFarba == RED) {
+            while (colorOf(uzol) == RED) {
                 //Prípad 2 - ak je brat červený
                 if (uzol.getBrotherColour() == RED) {
                     uzol.aFarba = BLACK;
@@ -95,13 +101,15 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
                     //Rotacia prava
                     if (uzol.amILeft()) {
                         //Podrotacia
-                        if (uzol.isRightSon(newnode)) {
+                        //if (uzol.isRightSon(newnode)) { //Nahradena metoda 
+						if (newnode.amIRight()) {
                             rotate_left(uzol);
                         }
                         rotate_right(uzol.aOtec);
                     }
                     else if (uzol.amIRight()) {
-                        if (uzol.isLeftSon(newnode)) {
+                        //if (uzol.isLeftSon(newnode)) {
+						if (newnode.amILeft()) {
                             rotate_right(uzol);
                         }
                         rotate_left(uzol.aOtec);
@@ -124,6 +132,11 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
         return true;
     }
 
+	/**
+	 * Vymaže prvok zo stromu
+	 * @param paData
+	 * @return false ak sa v strome nenachádza
+	 */
     public boolean delete(E paData) {
         RBNode node = (RBNode) searchTree(paData);
         //Ak sme prvok v strome nenašli tak končíme
@@ -154,11 +167,11 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
             if (nahrada.aPravy != null) {
                 throw new RuntimeException("WUT?");
             }
-            if (nahrada.aOtec != null && ((RBNode)nahrada.aOtec).aFarba != BLACK) {
+            if (nahrada.aOtec != null && colorOf(nahrada) != BLACK) {
                 throw new RuntimeException("WUT?");
             }
             
-            if (nahrada.aOtec != aVrchol && nahrada.aFarba != RED) {
+            if (nahrada.aOtec != aVrchol && colorOf(nahrada) != RED) {
                 throw new RuntimeException("WUT?");
             }
             
@@ -179,7 +192,7 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
             else {
                 throw new RuntimeException("Wut?");
             }
-            nahrada.aFarba = Colour.BLACK;
+            nahrada.aFarba = BLACK;
         }
         //Mazaný už nemá syna => je to list alebo koreň a nemá potomkov => vyprazdnenie stromu
         else if (node.aOtec == null) {
@@ -187,7 +200,7 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
         }
         //Je list
         else {
-            if (node.aFarba == Colour.BLACK) {
+            if (colorOf(node) == BLACK) {
                 fixTree(node);
             }
 
@@ -206,6 +219,11 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
 
     }
 
+	/**
+	 * Opraví strom po zmazaní uzla
+	 * (dvojitý čierny)
+	 * @param paNode 
+	 */
     protected void fixTree(RBNode paNode) {
         while (paNode != aVrchol && paNode.aFarba == BLACK) {
             if (paNode.amILeft()) {
@@ -272,10 +290,19 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
         paNode.aFarba = BLACK;
     }
 
+	/**
+	 * Vráti farbu uzla
+	 * @param node
+	 * @return 
+	 */
     private Colour colorOf(Node node) {
         return (node != null && ((RBNode) node).aFarba == RED) ? RED : BLACK;
     }
 
+	/**
+	 * Otestuje strom na RB pravidlá
+	 * @return 
+	 */
     public boolean testTreeRules() {
         System.out.print("Kontrola stromu - ");
         if (aVrchol == null) {
