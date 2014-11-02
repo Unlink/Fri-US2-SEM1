@@ -30,27 +30,29 @@ public class Generator {
 			}
 		}
 		//Generujeme tovary
+		long counter = 1;
 		for (int i = 0; i < pocetSkladov; i++) {
 			for (int j = 0; j < pocetTovarov; j++) {
-				int presuny = 1;
 				Date datV = randomDate(new Date(System.currentTimeMillis()-1000*60*60*24*200));
-				Tovar t = new Tovar(i*j+1, randomString(2).toUpperCase(), datV, new Date(datV.getTime()+randomBetween(1000*60*60*24*30, 1000*60*60*24*600)), randomBetween(1, 100));
-				sys.naskladniTovar(t, i);
-				while (rg.nextDouble() < (ppnost/presuny)) {
-					presuny++;
+				Tovar t = new Tovar(counter++, randomString(2).toUpperCase(), datV, new Date(datV.getTime()+randomBetween(1000*60*60*24*30, 1000*60*60*24*600)), randomBetween(1, 100));
+				if (!sys.naskladniTovar(t, i)) {
+					System.out.println(t);
+				}
+				while (rg.nextDouble() < ppnost) {
+					int idSkladu = ((Velkosklad)t.getAktualnaLokacia()).getId();
 					//Ideme k odberatelovi s pp50%
 					if (rg.nextDouble() < 0.5) {
-						List<Odberatel> os = sys.vypisOdberatelovSkladu(i);
+						List<Odberatel> os = sys.vypisOdberatelovSkladu(idSkladu);
 						Odberatel o = os.get(randomBetween(0, Math.max(0, os.size()-1)));
-						sys.expedujTovarKOdberatelovi(i, t.getVyrobneCislo(), o.getId(), randomDate(t.getDatumVyroby(), t.getDatumSpotreby()), randomString(2)+" "+randomString(3)+" "+randomString(2));
+						sys.expedujTovarKOdberatelovi(idSkladu, t.getVyrobneCislo(), o.getId(), randomDate(t.getDatumVyroby(), t.getDatumSpotreby()), randomString(2)+" "+randomString(3)+" "+randomString(2));
 						if (rg.nextDouble() < 0.5) {
 							sys.vylozTovar(t.getVyrobneCislo());
 						}
 						break;
 					}
 					else {	
-						int sklad = randomBetweenAndNot(0, pocetSkladov, ((Velkosklad)t.getAktualnaLokacia()).getId());
-						sys.expedujTovarDoVelkoskladu(i, t.getVyrobneCislo(), sklad, randomDate(t.getDatumVyroby(), t.getDatumSpotreby()), randomString(2)+" "+randomString(3)+" "+randomString(2));
+						int sklad = randomBetweenAndNot(0, pocetSkladov, idSkladu);
+						sys.expedujTovarDoVelkoskladu(idSkladu, t.getVyrobneCislo(), sklad, randomDate(t.getDatumVyroby(), t.getDatumSpotreby()), randomString(2)+" "+randomString(3)+" "+randomString(2));
 						if (rg.nextDouble() < 0.5) {
 							sys.vylozTovar(t.getVyrobneCislo());
 						}

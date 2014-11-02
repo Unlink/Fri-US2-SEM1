@@ -28,6 +28,7 @@ public class BasicFormFields
 	private final HashMap<Class<?>, Method> aRenders;
 	private final HashMap<Class<?>, Method> aValidators;
 	private static BasicFormFields aInstance;
+	public static final String DEFAULT = "DEFAULT";
 
 	public static BasicFormFields getInstance()
 	{
@@ -70,7 +71,11 @@ public class BasicFormFields
 		{
 			try
 			{
-				return (JComponent) m.invoke(aInstance, f);
+				JComponent jc = (JComponent) m.invoke(aInstance, f);
+				if (jc instanceof JTextComponent && f.hasParam(DEFAULT)) {
+					((JTextComponent) jc).setText(f.getParam(DEFAULT).value());
+				}
+				return jc;
 			}
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
 			{
