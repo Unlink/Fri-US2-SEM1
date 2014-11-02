@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import sk.uniza.fri.duracik2.tree.RBTree;
 
 /**
@@ -132,7 +130,7 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        napln(1000000);
+        napln(100);
         testuj();
     }
 }

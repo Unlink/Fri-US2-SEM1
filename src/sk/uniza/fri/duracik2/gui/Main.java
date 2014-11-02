@@ -47,7 +47,7 @@ public class Main extends javax.swing.JFrame {
 				if (paResult instanceof Iterable) {
 					for (Object x : (Iterable) paResult)
 					{
-						jColorTextPane1.append("> "+x+"\n");
+						vypis(x);
 					}
 					jColorTextPane1.append("\n");
 				}
@@ -55,11 +55,21 @@ public class Main extends javax.swing.JFrame {
 					jColorTextPane1.append(Color.RED, "> "+Tools.getErrorMessage((Exception) paResult)+"\n\n");
 				}
 				else {
-					jColorTextPane1.append("> "+paResult+"\n\n");
+					vypis(paResult);
+					jColorTextPane1.append("\n");
 				}
 			}
 		});
 		setLocationRelativeTo(null);
+	}
+	
+	private void vypis(Object obj) {
+		if (obj instanceof IGuiPrint) {
+			((IGuiPrint)obj).print(jColorTextPane1);
+		}
+		else {
+			jColorTextPane1.append("> "+obj.toString()+"\n");
+		}
 	}
 
 	/**

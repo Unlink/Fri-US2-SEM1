@@ -167,7 +167,7 @@ public class RBTree<E extends Comparable<? super E>> extends AbstractSearchTree<
             if (nahrada.aPravy != null) {
                 throw new RuntimeException("WUT?");
             }
-            if (nahrada.aOtec != null && colorOf(nahrada) != BLACK) {
+            if (nahrada.aOtec != null && colorOf(nahrada.aOtec) != BLACK) {
                 throw new RuntimeException("WUT?");
             }
             
