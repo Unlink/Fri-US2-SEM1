@@ -112,7 +112,7 @@ public class BasicFormFields
 		}
 		else
 		{
-			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená render metoda pre " + f.getType().getName());
+			throw new ReflectorException("Nepodarilo sa vyvolať metódu, nebola nájdená validate metoda pre " + f.getType().getName());
 		}
 	}
 
@@ -152,11 +152,21 @@ public class BasicFormFields
 			throw new NumberFormatException("Nesprávny číselný vstup pre pole "+paField.getName());
 		}
 	}
+	
+	public Double validateDouble(JComponent paComponent, Field paField)
+	{
+		try {
+			return Double.parseDouble(((JTextComponent) paComponent).getText());
+		}
+		catch (NumberFormatException ex) {
+			throw new NumberFormatException("Nesprávny číselný vstup pre pole "+paField.getName());
+		}
+	}
 
 	public Date validateDate(JComponent paComponent, Field paField) throws ParseException
 	{
 		try {
-			return new SimpleDateFormat("dd.mm.yyyy").parse(((JTextComponent) paComponent).getText());
+			return new SimpleDateFormat("dd.MM.yyyy").parse(((JTextComponent) paComponent).getText());
 		}
 		catch (ParseException ex) {
 			throw new ParseException("Nepodarilo sa načítať dátum z pola "+paField.getName(), ex.getErrorOffset());

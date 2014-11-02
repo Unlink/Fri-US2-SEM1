@@ -25,8 +25,8 @@ import sk.uniza.fri.duracik2.tree.RBTree;
  * @author Unlink
  */
 public class ExportnySystem {
-    private RBTree<Tovar> aZoznamTovarov;
-    private RBTree<Velkosklad> aVelkosklady;
+    private final RBTree<Tovar> aZoznamTovarov;
+    private final RBTree<Velkosklad> aVelkosklady;
 
     public ExportnySystem() {
         this.aZoznamTovarov = new RBTree<>(Tovar.INDEXER);
@@ -250,7 +250,6 @@ public class ExportnySystem {
      * spotreba do zadaného počtu dní (napr. do 5 dní) od zadaného dátumu
      * @param idSkladu
      * @param datSpotreby
-     * @param datum
      * @return 
      */
 	@Funkcia(id = 13, parametre = {"Identifikátor skladu", "Dátum spotreby"})
@@ -429,5 +428,13 @@ public class ExportnySystem {
         } catch (IOException ex) {
             return false;
         }
+    }
+	
+	
+	@Funkcia(parametre = {"Počet skladov", "Počet odberatelov na sklad", "Pocet tovarov na sklad", "Pravdepodobnosť expedicie"})
+    public void vygenerujData(int pocetSkladov, int pocetOdberatelov, int pocetTovarov, double ppnost) {
+        aVelkosklady.clear();
+		aZoznamTovarov.clear();
+		new Generator().generuj(this, pocetSkladov, pocetOdberatelov, pocetTovarov, ppnost);
     }
 }

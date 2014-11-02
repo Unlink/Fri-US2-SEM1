@@ -48,6 +48,7 @@ public class Main extends javax.swing.JFrame {
 					for (Object x : (Iterable) paResult)
 					{
 						vypis(x);
+						jColorTextPane1.append("\n");
 					}
 					jColorTextPane1.append("\n");
 				}
@@ -74,6 +75,9 @@ public class Main extends javax.swing.JFrame {
 				jColorTextPane1.append(Color.GREEN.darker().darker(), "OK");
 			else 
 				jColorTextPane1.append(Color.RED, "Chyba");
+		}
+		else if (obj == null) {
+			jColorTextPane1.append("> null\n");
 		}
 		else {
 			jColorTextPane1.append("> "+obj.toString()+"\n");
