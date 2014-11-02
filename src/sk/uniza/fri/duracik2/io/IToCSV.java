@@ -12,7 +12,16 @@ package sk.uniza.fri.duracik2.io;
  */
 public interface IToCSV {
     
+	/**
+	 * Vráti pole objektov, ktoré sa zapíšu do CSV súboru
+	 * @return 
+	 */
     public Object[] toCsvData();
+	/**
+	 * Načíta sa z CSV dát 
+	 * @param paImporter
+	 * @param paAtrrs 
+	 */
     public void fromCSV(Importer paImporter, String[] paAtrrs);
     public EObjectType getTyp();
     /**

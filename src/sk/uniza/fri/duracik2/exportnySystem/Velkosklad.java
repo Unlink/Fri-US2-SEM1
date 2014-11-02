@@ -122,7 +122,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
     public boolean exportujTovar(long paIdTovaru, AMiesto ciel, Date datumPrichodu, String evcVozidla) {
         Tovar tovar = aTovaryById.findByParams(paIdTovaru);
         if (tovar == null)
-            return false;
+            throw new IllegalArgumentException("Tovar s ID "+paIdTovaru+" sa v sklade nenachádza00");
         Expedicia expZaznam = new Expedicia(tovar, evcVozidla, new Date(), datumPrichodu, tovar.getPosExpZaznam(), this, ciel);
         tovar.setPosExpZaznam(expZaznam);
         aTovaryByDatum.delete(tovar);
@@ -135,7 +135,8 @@ public class Velkosklad extends AMiesto implements IToCSV {
     
     public boolean exportujTovarKOdberatelovi(long paIdTovaru, String paIdOdberatela, Date paDatumPrichodu, String paEvcVozidla) {
         Odberatel odberatel = aOdberatelia.findByParams(paIdOdberatela);
-        if (odberatel == null) return false;
+        if (odberatel == null) 
+			throw new IllegalArgumentException("Odberateľ s ID "+paIdOdberatela+" nieje evidovaný");
         return exportujTovar(paIdTovaru, odberatel, paDatumPrichodu, paEvcVozidla);
     }
 
@@ -180,6 +181,9 @@ public class Velkosklad extends AMiesto implements IToCSV {
     }
     
     public void zrusSklad(Velkosklad paSklad2) {
+		if (aExpedovane.size() > 0) 
+			throw new IllegalArgumentException("Zo skladu sú stále expedované tovary!");
+				
         aValid = false;
         for (Tovar tovar : aTovaryById) {
             paSklad2.naskladniTovar(tovar);
@@ -190,20 +194,21 @@ public class Velkosklad extends AMiesto implements IToCSV {
         aTovaryByDatum.clear();
         aTovaryByEan.clear();
         aTovaryById.clear();
-        for (Expedicia expedicia : aExpedovane) {
+        /*for (Expedicia expedicia : aExpedovane) {
             expedicia.setZdroj(paSklad2);
             expedicia.getTovar().setAktualnaLokacia(paSklad2);
             paSklad2.aExpedovane.insert(expedicia);
-        }
+        }*/
         aExpedovane.clear();
     }
     
     public boolean zrusOdberatela(String paIdOdberatela) {
         Odberatel odberatel = vyhladajOdberatela(paIdOdberatela);
-        if (odberatel == null) return false;
+        if (odberatel == null) 
+			throw new IllegalArgumentException("Odberateľ s ID "+paIdOdberatela+" nieje evidovaný");
         for (Expedicia expedicia : aExpedovane) {
             if (expedicia.getCiel() == odberatel)
-                return false;
+                throw new IllegalArgumentException("K oberateľovi sú stále expedované tovary!");
         }
         odberatel.setSklad(null);
         return aOdberatelia.delete(odberatel);
