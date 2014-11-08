@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import sk.uniza.fri.duracik2.exportnySystem.ExportnySystem;
+import sk.uniza.fri.duracik2.exportnySystem.Generator;
 import sk.uniza.fri.duracik2.exportnySystem.Tovar;
 import sk.uniza.fri.duracik2.tree.RBTree;
 
@@ -29,7 +30,20 @@ public class Main {
         }
     }
     
-    public static void main(String[] args) {
+	public static void main(String[] args) {
+		long time = System.currentTimeMillis();
+		System.out.println(time);
+		Generator g = new Generator();
+		System.out.println(g.days(200));
+		System.out.println(time-g.days(200));
+		/*while (true) {
+			
+			Date datV = g.randomDate(time-g.days(200));
+			System.out.println(datV);
+		}*/
+	}
+	
+    public static void main2(String[] args) {
         
 		System.out.println("Bla ble blix");
 		
