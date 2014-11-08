@@ -214,8 +214,8 @@ public class SpringUtilities {
                 constraints.setY(y);
 				
 				if (parent.getComponent(r * c + c) instanceof JTextField) {
-					constraints.setY(Spring.sum(y, Spring.scale(Spring.sum(height, Spring.constant(-20)), 1/2f)));
-					constraints.setHeight(Spring.constant(20));
+					constraints.setY(Spring.sum(y, Spring.scale(Spring.sum(height, Spring.constant(-22)), 1/2f)));
+					constraints.setHeight(Spring.constant(22));
 				}
 				else 
 					constraints.setHeight(height);

@@ -12,11 +12,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
+import org.jdatepicker.JDateComponentFactory;
+import org.jdatepicker.JDatePicker;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 /**
  *
@@ -121,7 +127,7 @@ public class BasicFormFields
 		}
 	}
 
-	@FormField(typ = {String.class, Integer.class, Double.class, Date.class, Long.class})
+	@FormField(typ = {String.class, Integer.class, Double.class, Long.class})
 	public JTextComponent renderBasic(Field paField)
 	{
 		return new JTextField();
@@ -131,6 +137,15 @@ public class BasicFormFields
 	public JComponent renderFile(Field paField)
 	{
 		return new FileComponentField(paField);
+	}
+	
+	@FormField(typ = {Date.class})
+	public JComponent renderDate(Field paField) {
+		JDateComponentFactory componentFactory = new JDateComponentFactory();
+		JDatePicker datePicker = componentFactory.createJDatePicker();
+		datePicker.setTextEditable(true);
+		datePicker.setShowYearButtons(true);
+		return (JComponent) datePicker;
 	}
 
 	public String validateString(JComponent paComponent, Field paField)
@@ -171,10 +186,12 @@ public class BasicFormFields
 	public Date validateDate(JComponent paComponent, Field paField) throws ParseException
 	{
 		try {
-			return new SimpleDateFormat("dd.MM.yyyy").parse(((JTextComponent) paComponent).getText());
+			//return new SimpleDateFormat("dd.MM.yyyy").parse(((JTextComponent) paComponent).getText());
+			Calendar c = (Calendar) ((JDatePicker) paComponent).getModel().getValue();
+			return c.getTime();
 		}
-		catch (ParseException ex) {
-			throw new ParseException("Nepodarilo sa načítať dátum z pola "+paField.getName(), ex.getErrorOffset());
+		catch (Exception ex) {
+			throw new RuntimeException("Nepodarilo sa načítať dátum z pola "+paField.getName());
 		}
 	}
 
