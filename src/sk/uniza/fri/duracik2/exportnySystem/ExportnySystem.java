@@ -487,6 +487,7 @@ public class ExportnySystem {
 			return true;
 		}
 		catch (IOException ex) {
+			ex.printStackTrace();
 			return false;
 		}
 	}

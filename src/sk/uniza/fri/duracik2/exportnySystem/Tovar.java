@@ -13,6 +13,7 @@ import sk.uniza.fri.duracik2.gui.IGuiPrint;
 import sk.uniza.fri.duracik2.gui.JColorTextPane;
 import sk.uniza.fri.duracik2.gui.reflection.FunkcnyKonstruktor;
 import sk.uniza.fri.duracik2.io.EObjectType;
+import sk.uniza.fri.duracik2.io.ExportUtil;
 import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
@@ -128,8 +129,8 @@ public class Tovar implements Comparable<Tovar>, IToCSV, IGuiPrint {
 	public void fromCSV(Importer paImporter, String[] paAtrrs) {
 
 		aEanKod = paAtrrs[1];
-		aDatumVyroby = new Date(Long.parseLong(paAtrrs[2]));
-		aDatumSpotreby = new Date(Long.parseLong(paAtrrs[3]));
+		aDatumVyroby = ExportUtil.getInstance().convertDate(paAtrrs[2]);
+		aDatumSpotreby = ExportUtil.getInstance().convertDate(paAtrrs[3]);
 		aCena = Integer.parseInt(paAtrrs[4]);
 		aAktualnaLokacia = (paAtrrs[5].isEmpty())
 			? null : (paAtrrs[5].startsWith("o_"))

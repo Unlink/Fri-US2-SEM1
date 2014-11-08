@@ -86,7 +86,7 @@ public class Exporter {
             return ((IToCSV) attr).getObjectKey();
         }
         else if (attr instanceof Date) {
-            return ((Date) attr).getTime() + "";
+            return ExportUtil.getInstance().convertDate((Date) attr);
         }
         else if (attr == null) {
             return "";

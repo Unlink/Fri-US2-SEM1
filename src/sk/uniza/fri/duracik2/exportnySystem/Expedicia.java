@@ -13,6 +13,7 @@ import sk.uniza.fri.duracik2.gui.IGuiPrint;
 import sk.uniza.fri.duracik2.gui.IGuiPrintListHead;
 import sk.uniza.fri.duracik2.gui.JColorTextPane;
 import sk.uniza.fri.duracik2.io.EObjectType;
+import sk.uniza.fri.duracik2.io.ExportUtil;
 import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.TreeIndexer;
 
@@ -137,8 +138,8 @@ public class Expedicia implements Comparable<Expedicia>, IToCSV, IGuiPrint, IGui
     public void fromCSV(Importer paImporter, String[] paAtrrs) {
         aTovar = paImporter.getTovar(Long.parseLong(paAtrrs[1]));
         aEvcPrepravcu = paAtrrs[2];
-        aDatZaciatku = new Date(Long.parseLong(paAtrrs[3]));
-        aDatKonca = new Date(Long.parseLong(paAtrrs[4]));
+        aDatZaciatku = ExportUtil.getInstance().convertDate(paAtrrs[3]);
+        aDatKonca = ExportUtil.getInstance().convertDate(paAtrrs[4]);
         aPredchadzajuca = (paAtrrs[5].isEmpty()) ? null : paImporter.getExpedicia(Long.parseLong(paAtrrs[5]));
         aZdroj = paImporter.getVelkosklad(Integer.parseInt(paAtrrs[6].substring(2)));
         aCiel = (paAtrrs[7].isEmpty())
