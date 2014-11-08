@@ -103,7 +103,7 @@ public class ExportnySystem {
 		Velkosklad sklad = vyhladajSklad(idSkladu);
 
 		if (!aZoznamTovarov.insert(paTovar)) {
-			return false;
+			throw new IllegalArgumentException("Duplikátny výrobný kód tovaru");
 		}
 		else {
 			return sklad.naskladniTovar(paTovar);

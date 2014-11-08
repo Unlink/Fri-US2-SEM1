@@ -6,11 +6,13 @@
 
 package sk.uniza.fri.duracik2.exportnySystem;
 
+import java.awt.Color;
 import sk.uniza.fri.duracik2.io.IToCSV;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import sk.uniza.fri.duracik2.gui.JColorTextPane;
 import sk.uniza.fri.duracik2.io.EObjectType;
 import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.RBTree;
@@ -320,7 +322,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
     public void fromCSV(Importer paImporter, String[] paAtrrs) {
         aNazov = paAtrrs[1];
         aAdresa = paAtrrs[2];
-        aNahrada = (paAtrrs.length > 2 && !paAtrrs[3].isEmpty()) ? paImporter.getVelkosklad(Integer.parseInt(paAtrrs[3].substring(2))) : null;
+        aNahrada = (paAtrrs.length > 3 && !paAtrrs[3].isEmpty()) ? paImporter.getVelkosklad(Integer.parseInt(paAtrrs[3].substring(2))) : null;
     }
 
     @Override
@@ -338,6 +340,12 @@ public class Velkosklad extends AMiesto implements IToCSV {
 
 	public Velkosklad getNahrada() {
 		return aNahrada;
+	}
+
+	@Override
+	public void print(JColorTextPane pane) {
+		pane.append(Color.BLUE, getNazov());
+		pane.append(Color.GRAY, " (" + getId() + ")");
 	}
     
 }

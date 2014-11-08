@@ -9,13 +9,14 @@ package sk.uniza.fri.duracik2.exportnySystem;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import sk.uniza.fri.duracik2.gui.IGuiPrint;
 import sk.uniza.fri.duracik2.tree.RBTree;
 
 /**
  *
  * @author Unlink
  */
-public abstract class AMiesto implements Comparable<AMiesto> {
+public abstract class AMiesto implements Comparable<AMiesto>, IGuiPrint {
     protected String aNazov;
     protected String aAdresa;
     protected List<Expedicia> aZoznamPrijatychTovatov;

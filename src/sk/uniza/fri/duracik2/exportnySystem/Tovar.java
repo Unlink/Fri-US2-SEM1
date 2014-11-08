@@ -153,13 +153,8 @@ public class Tovar implements Comparable<Tovar>, IToCSV, IGuiPrint {
 		if (aAktualnaLokacia == null) {
 			pane.append(Color.RED, "N/A");
 		}
-		else if (aAktualnaLokacia instanceof Odberatel) {
-			pane.append(Color.GREEN.darker().darker(), aAktualnaLokacia.getNazov());
-			pane.append(Color.GRAY, " (" + ((Odberatel) aAktualnaLokacia).getId() + ")");
-		}
 		else {
-			pane.append(Color.BLUE, aAktualnaLokacia.getNazov());
-			pane.append(Color.GRAY, " (" + ((Velkosklad) aAktualnaLokacia).getId() + ")");
+			aAktualnaLokacia.print(pane);
 		}
 		pane.append("\n Dátum výroby/spotreby: ");
 		pane.append(Color.BLUE, format.format(aDatumVyroby) + "/" + format.format(aDatumSpotreby));

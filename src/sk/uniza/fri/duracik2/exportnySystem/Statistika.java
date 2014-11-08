@@ -6,11 +6,16 @@
 
 package sk.uniza.fri.duracik2.exportnySystem;
 
+import java.awt.Color;
+import sk.uniza.fri.duracik2.gui.IGuiPrint;
+import sk.uniza.fri.duracik2.gui.IGuiPrintListHead;
+import sk.uniza.fri.duracik2.gui.JColorTextPane;
+
 /**
  *
  * @author Unlink
  */
-public class Statistika {
+public class Statistika implements IGuiPrint, IGuiPrintListHead {
     private String aEan;
     private int aCount;
     private int aSum;
@@ -42,6 +47,21 @@ public class Statistika {
 	public String toString()
 	{
 		return "{" + "aEan=" + aEan + ", aCount=" + aCount + ", aSum=" + aSum + '}';
+	}
+
+	@Override
+	public void print(JColorTextPane pane) {
+		pane.append(aEan+"\t");
+		pane.append(Color.BLUE.darker(), aCount+"\t");
+		pane.append(Color.GREEN.darker().darker(), aSum+"");
+	}
+
+	@Override
+	public void printListHead(JColorTextPane pane) {
+		pane.append("Ean\t");
+		pane.append(Color.BLUE.darker(), "Počet\t");
+		pane.append(Color.GREEN.darker().darker(), "Cena");
+		pane.append("\n=========================");
 	}
 	
 	

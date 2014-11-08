@@ -6,6 +6,8 @@
 
 package sk.uniza.fri.duracik2.exportnySystem;
 
+import java.awt.Color;
+import sk.uniza.fri.duracik2.gui.JColorTextPane;
 import sk.uniza.fri.duracik2.io.EObjectType;
 import sk.uniza.fri.duracik2.io.IToCSV;
 import sk.uniza.fri.duracik2.io.Importer;
@@ -19,7 +21,7 @@ public class Odberatel extends AMiesto implements IToCSV {
     public static final TreeIndexer<Odberatel> INDEXER = new TreeIndexer<Odberatel>() {
             @Override
             public int compare(Odberatel e1, Object... params) {
-                String id = "0";
+                String id;
                 if (params[0] instanceof Odberatel)
                     id = ((Odberatel)params[0]).getId();
                 else if (params[0] instanceof String)
@@ -88,5 +90,11 @@ public class Odberatel extends AMiesto implements IToCSV {
     public String toString() {
         return "Odberatel{" + "aId=" + aId + ", aSklad=" + aSklad + '}';
     } 
+
+	@Override
+	public void print(JColorTextPane pane) {
+		pane.append(Color.GREEN.darker().darker(), getNazov());
+		pane.append(Color.GRAY, " (" + getId() + ")");
+	}
     
 }

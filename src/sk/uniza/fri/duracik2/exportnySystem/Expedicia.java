@@ -6,8 +6,12 @@
 
 package sk.uniza.fri.duracik2.exportnySystem;
 
+import java.awt.Color;
 import sk.uniza.fri.duracik2.io.IToCSV;
 import java.util.Date;
+import sk.uniza.fri.duracik2.gui.IGuiPrint;
+import sk.uniza.fri.duracik2.gui.IGuiPrintListHead;
+import sk.uniza.fri.duracik2.gui.JColorTextPane;
 import sk.uniza.fri.duracik2.io.EObjectType;
 import sk.uniza.fri.duracik2.io.Importer;
 import sk.uniza.fri.duracik2.tree.TreeIndexer;
@@ -16,7 +20,7 @@ import sk.uniza.fri.duracik2.tree.TreeIndexer;
  *
  * @author Unlink
  */
-public class Expedicia implements Comparable<Expedicia>, IToCSV {
+public class Expedicia implements Comparable<Expedicia>, IToCSV, IGuiPrint, IGuiPrintListHead {
     public static final TreeIndexer<Expedicia> INDEXER = new TreeIndexer<Expedicia>() {
         @Override
         public int compare(Expedicia e1, Object... params) {
@@ -147,5 +151,23 @@ public class Expedicia implements Comparable<Expedicia>, IToCSV {
     public String toString() {
         return "Expedicia{" + "aId=" + aId + ", aTovar=" + aTovar.getVyrobneCislo() + ", aEvcPrepravcu=" + aEvcPrepravcu + ", aPredchadzajuca=" + (aPredchadzajuca  == null ? "null" : aPredchadzajuca.getId()) + ", aZdroj=" + aZdroj.getNazov() + ", aCiel=" + aCiel.getNazov() + '}';
     }
+
+	@Override
+	public void print(JColorTextPane pane) {
+		pane.append(aTovar.getEanKod()+"\t");
+		pane.append(aTovar.getVyrobneCislo()+"\t");
+		aZdroj.print(pane);
+		pane.append(" \t");
+		pane.append(aEvcPrepravcu);
+	}
+
+	@Override
+	public void printListHead(JColorTextPane pane) {
+		pane.append("Ean\t");
+		pane.append("ID\t");
+		pane.append("Zdroj\t\t");
+		pane.append("Prepravca");
+		pane.append("\n==================================================");
+	}
     
 }

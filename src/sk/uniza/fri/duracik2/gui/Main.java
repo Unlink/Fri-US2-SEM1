@@ -9,8 +9,6 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.SwingWorker;
@@ -54,7 +52,13 @@ public class Main extends javax.swing.JFrame {
 					public void run() {
 						jColorTextPane1.append(Color.BLUE.darker(), paName.trim() + "\n", JColorTextPane.TYPE_UNDERLINE | JColorTextPane.TYPE_BOLD);
 						if (paResult instanceof Iterable) {
+							boolean head = false;
 							for (Object x : (Iterable) paResult) {
+								if (!head && x instanceof IGuiPrintListHead) {
+									((IGuiPrintListHead)x).printListHead(jColorTextPane1);
+									jColorTextPane1.append("\n");
+									head = true;
+								}
 								vypis(x);
 								jColorTextPane1.append("\n");
 							}
