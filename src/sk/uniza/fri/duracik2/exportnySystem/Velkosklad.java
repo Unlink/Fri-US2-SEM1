@@ -335,5 +335,9 @@ public class Velkosklad extends AMiesto implements IToCSV {
     public void vlozExpedicnyZaznam(Expedicia paPosExpZaznam) {
         aExpedovane.insert(paPosExpZaznam);
     }
+
+	public Velkosklad getNahrada() {
+		return aNahrada;
+	}
     
 }

@@ -179,6 +179,10 @@ public class ExportnySystem {
 		}
 		Velkosklad sklad = (Velkosklad) tovar.getPosExpZaznam().getZdroj();
 		AMiesto ciel = tovar.getPosExpZaznam().getCiel();
+		while (ciel instanceof Velkosklad && !((Velkosklad)ciel).isValid()) {
+			ciel = ((Velkosklad)ciel).getNahrada();
+			tovar.getPosExpZaznam().setCiel(ciel);
+		}
 		//Už je vyložený
 		if (tovar.getAktualnaLokacia() != sklad) {
 			throw new IllegalArgumentException("Tovar je už vyložený");
