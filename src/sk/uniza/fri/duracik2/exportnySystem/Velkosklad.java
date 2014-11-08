@@ -48,20 +48,20 @@ public class Velkosklad extends AMiesto implements IToCSV {
         return Integer.parseInt(paAtrrs[0]);
     }
     
-    
     private int aId;
-    private boolean aValid;
     private RBTree<Tovar> aTovaryById;
     private RBTree<Tovar> aTovaryByEan;
     private RBTree<Tovar> aTovaryByDatum;
     
     private RBTree<Odberatel> aOdberatelia;
     private RBTree<Expedicia> aExpedovane;
+	
+	private Velkosklad aNahrada;
 
     public Velkosklad(int aId, String aNazov, String aAdresa) {
         super(aNazov, aAdresa);
         this.aId = aId;
-        this.aValid = true;
+        aNahrada = null;
         aTovaryById = new RBTree<>(aTovarIndexerID);
         aTovaryByEan = new RBTree<>(aTovarIndexerEan);
         aTovaryByDatum = new RBTree<>(aTovarIndexerDatum);
@@ -183,8 +183,9 @@ public class Velkosklad extends AMiesto implements IToCSV {
     public void zrusSklad(Velkosklad paSklad2) {
 		if (aExpedovane.size() > 0) 
 			throw new IllegalArgumentException("Zo skladu sú stále expedované tovary!");
+		
 				
-        aValid = false;
+        aNahrada = paSklad2;
         for (Tovar tovar : aTovaryById) {
             paSklad2.naskladniTovar(tovar);
         }
@@ -302,7 +303,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
 
     @Override
     public Object[] toCsvData() {
-        return new Object[]{aId, aNazov, aAdresa, aValid};
+        return new Object[]{aId, aNazov, aAdresa, aNahrada};
     }
 
     @Override
@@ -319,22 +320,20 @@ public class Velkosklad extends AMiesto implements IToCSV {
     public void fromCSV(Importer paImporter, String[] paAtrrs) {
         aNazov = paAtrrs[1];
         aAdresa = paAtrrs[2];
-        aValid = Boolean.parseBoolean(paAtrrs[3]);
+        aNahrada = (paAtrrs.length > 2 && !paAtrrs[3].isEmpty()) ? paImporter.getVelkosklad(Integer.parseInt(paAtrrs[3].substring(2))) : null;
     }
 
     @Override
     public String toString() {
-        return "Velkosklad{" + "aId=" + aId + ", aValid=" + aValid + '}';
+        return "Velkosklad{" + "aId=" + aId + ", aValid=" + isValid() + '}';
     }
 
     public boolean isValid() {
-        return aValid;
+        return aNahrada == null;
     }
 
     public void vlozExpedicnyZaznam(Expedicia paPosExpZaznam) {
         aExpedovane.insert(paPosExpZaznam);
     }
-    
-    
     
 }
