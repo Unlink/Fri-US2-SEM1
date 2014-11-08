@@ -6,37 +6,61 @@
 package sk.uniza.fri.duracik2.gui.reflection;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 import javax.swing.JFileChooser;
+import javax.swing.SwingWorker;
 
 /**
  *
  * @author Unlink
  */
-public class FileComponentField extends javax.swing.JPanel
-{	
-	
+public class FileComponentField extends javax.swing.JPanel {
+
 	private JFileChooser aFileChooser;
 	private File aSelected;
-	
+
 	/**
 	 * Creates new form FileComponentField
+	 *
+	 * @param paField
 	 */
-	public FileComponentField(Field paField)
-	{
+	public FileComponentField(final Field paField) {
 		initComponents();
-		aFileChooser = new JFileChooser();
-		if (paField.hasParam("JFileChooser.type")) {
-			aFileChooser.setDialogType(paField.getParam("JFileChooser.type").intValue());
-		}
-		if (paField.hasParam("JFileChooser.fileSelectionMode")) {
-			aFileChooser.setFileSelectionMode(paField.getParam("JFileChooser.fileSelectionMode").intValue());
-			if (paField.getParam("JFileChooser.fileSelectionMode").intValue() == JFileChooser.DIRECTORIES_ONLY) {
-				aFileChooser.setDialogTitle("Vyber zložku");
+		//Load File Chooser in background thread
+		loadFileChooser(paField);
+	}
+
+	private void loadFileChooser(final Field paField) {
+		new SwingWorker<JFileChooser, Object>() {
+			@Override
+			protected JFileChooser doInBackground() throws Exception {
+
+				JFileChooser jfc = new JFileChooser();
+				if (paField.hasParam("JFileChooser.type")) {
+					jfc.setDialogType(paField.getParam("JFileChooser.type").intValue());
+				}
+				if (paField.hasParam("JFileChooser.fileSelectionMode")) {
+					jfc.setFileSelectionMode(paField.getParam("JFileChooser.fileSelectionMode").intValue());
+					if (paField.getParam("JFileChooser.fileSelectionMode").intValue() == JFileChooser.DIRECTORIES_ONLY) {
+						jfc.setDialogTitle("Vyber zložku");
+					}
+					else {
+						jfc.setDialogTitle("Vyber súbor");
+					}
+				}
+				return jfc;
 			}
-			else {
-				aFileChooser.setDialogTitle("Vyber súbor");
+
+			@Override
+			protected void done() {
+				try {
+					aFileChooser = get();
+				}
+				catch (InterruptedException | ExecutionException ex) {
+					ex.printStackTrace();
+				}
 			}
-		}
+		}.execute();
 	}
 
 	/**
@@ -83,7 +107,7 @@ public class FileComponentField extends javax.swing.JPanel
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
-        if (aFileChooser.showDialog(this, "Ok") == JFileChooser.APPROVE_OPTION) {
+		if (aFileChooser != null && aFileChooser.showDialog(this, "Ok") == JFileChooser.APPROVE_OPTION) {
 			aSelected = aFileChooser.getSelectedFile();
 			jTextField1.setText(aSelected.getAbsolutePath());
 		}

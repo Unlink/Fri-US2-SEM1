@@ -14,13 +14,14 @@ import java.lang.annotation.Target;
  *
  * @author Unlink
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE})
-public @interface FunkciaParameter
-{
+public @interface FunkciaParameter {
 	public int param();
+
 	public String key();
+
 	public String value() default "";
+
 	public int intValue() default 0;
 }

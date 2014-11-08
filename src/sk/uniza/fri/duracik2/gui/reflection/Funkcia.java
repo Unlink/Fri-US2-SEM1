@@ -14,12 +14,14 @@ import java.lang.annotation.Target;
  *
  * @author Unlink
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface Funkcia {
 	int id() default -1;
+
 	String name() default "";
+
 	String popis() default "";
+
 	String[] parametre() default {};
 }

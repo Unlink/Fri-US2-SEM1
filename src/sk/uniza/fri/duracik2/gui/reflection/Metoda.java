@@ -5,13 +5,10 @@
  */
 package sk.uniza.fri.duracik2.gui.reflection;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 /**
@@ -99,10 +96,6 @@ public class Metoda implements Comparable<Metoda> {
 				l.methodExecuted(aName, params, output);
 			}
 		}
-		/*catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-		 {
-		 throw new ReflectorException("Nepodarilo sa vykonať metódu\n" + ex, ex);
-		 }*/
 		catch (Exception ex) {
 			for (MethodExecuteListnerer l : (List<MethodExecuteListnerer>) aReflektor.getListnerers()) {
 				l.methodExecuted(aName, params, ex);

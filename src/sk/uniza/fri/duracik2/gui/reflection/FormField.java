@@ -14,10 +14,8 @@ import java.lang.annotation.Target;
  *
  * @author Unlink
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@interface FormField
-{
+@interface FormField {
 	Class<? extends Object>[] typ();
 }

@@ -55,7 +55,7 @@ public class Main extends javax.swing.JFrame {
 							boolean head = false;
 							for (Object x : (Iterable) paResult) {
 								if (!head && x instanceof IGuiPrintListHead) {
-									((IGuiPrintListHead)x).printListHead(jColorTextPane1);
+									((IGuiPrintListHead) x).printListHead(jColorTextPane1);
 									jColorTextPane1.append("\n");
 									head = true;
 								}
@@ -201,7 +201,7 @@ public class Main extends javax.swing.JFrame {
 			protected Long doInBackground() throws Exception {
 				long begin = System.nanoTime();
 				((Metoda) jComboBox1.getSelectedItem()).submitMethod();
-				return System.nanoTime()- begin;
+				return System.nanoTime() - begin;
 			}
 
 			@Override
@@ -209,7 +209,7 @@ public class Main extends javax.swing.JFrame {
 				jButton1.setIcon(null);
 				jButton1.setEnabled(true);
 				try {
-					jLabel2.setText(String.format("%.3f ms", get()/1000000.0d));
+					jLabel2.setText(String.format("%.3f ms", get() / 1000000.0d));
 				}
 				catch (InterruptedException | ExecutionException ex) {
 				}

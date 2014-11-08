@@ -14,10 +14,8 @@ import java.lang.annotation.Target;
  *
  * @author Unlink
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface FunkciaParametre
-{
+public @interface FunkciaParametre {
 	public FunkciaParameter[] parametre();
 }

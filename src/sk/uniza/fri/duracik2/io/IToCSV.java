@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package sk.uniza.fri.duracik2.io;
 
 /**
@@ -11,23 +10,29 @@ package sk.uniza.fri.duracik2.io;
  * @author Unlink
  */
 public interface IToCSV {
-    
+
 	/**
 	 * Vráti pole objektov, ktoré sa zapíšu do CSV súboru
-	 * @return 
+	 *
+	 * @return
 	 */
-    public Object[] toCsvData();
+	public Object[] toCsvData();
+
 	/**
-	 * Načíta sa z CSV dát 
+	 * Načíta sa z CSV dát
+	 *
 	 * @param paImporter
-	 * @param paAtrrs 
+	 * @param paAtrrs
 	 */
-    public void fromCSV(Importer paImporter, String[] paAtrrs);
-    public EObjectType getTyp();
-    /**
-     * Vráti klúč pre zápis do súboru
-     * @return 
-     */
-    public String getObjectKey();
-    
+	public void fromCSV(Importer paImporter, String[] paAtrrs);
+
+	public EObjectType getTyp();
+
+	/**
+	 * Vráti klúč pre zápis do súboru
+	 *
+	 * @return
+	 */
+	public String getObjectKey();
+
 }

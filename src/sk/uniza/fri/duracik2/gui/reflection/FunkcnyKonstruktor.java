@@ -16,8 +16,8 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.CONSTRUCTOR})
-public @interface FunkcnyKonstruktor
-{
+public @interface FunkcnyKonstruktor {
 	String popis() default "";
+
 	String[] parametre() default {};
 }

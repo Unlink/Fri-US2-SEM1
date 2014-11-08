@@ -7,44 +7,38 @@ package sk.uniza.fri.duracik2.gui.reflection;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
  * @author Unlink
  */
-public class Field
-{
+public class Field {
 	private String aName;
 	private Class<?> aType;
 	private Map<String, FunkciaParameter> aParams;
 
-	public Field(String aName, Class<?> aType)
-	{
+	public Field(String aName, Class<?> aType) {
 		this(aName, aType, new HashMap<>());
 	}
-	
-	public Field(String aName, Class<?> aType, Map aParams)
-	{
+
+	public Field(String aName, Class<?> aType, Map aParams) {
 		this.aName = aName;
 		this.aType = aType;
 		this.aParams = aParams;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return aName;
 	}
 
-	public Class<?> getType()
-	{
+	public Class<?> getType() {
 		return aType;
 	}
-	
+
 	public FunkciaParameter getParam(String paKey) {
 		return aParams.get(paKey);
 	}
-	
+
 	public boolean hasParam(String paKey) {
 		return aParams.get(paKey) != null;
 	}

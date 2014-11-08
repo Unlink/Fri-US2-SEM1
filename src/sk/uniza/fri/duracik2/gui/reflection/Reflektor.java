@@ -16,7 +16,7 @@ import java.util.List;
  * @author Unlink
  */
 public class Reflektor<T> {
-	
+
 	private List<Metoda> aMedoty;
 	private T aObj;
 	private List<MethodExecuteListnerer> aListnerers;
@@ -25,7 +25,7 @@ public class Reflektor<T> {
 		this.aObj = paObj;
 		this.aMedoty = new ArrayList<>();
 		this.aListnerers = new LinkedList<>();
-		for(Method m:paObj.getClass().getDeclaredMethods()) {
+		for (Method m : paObj.getClass().getDeclaredMethods()) {
 			if (m.getAnnotation(Funkcia.class) != null) {
 				aMedoty.add(new Metoda(this, m));
 			}
@@ -48,13 +48,13 @@ public class Reflektor<T> {
 	public List<MethodExecuteListnerer> getListnerers() {
 		return aListnerers;
 	}
-	
+
 	public void addExecutionListnerer(MethodExecuteListnerer paMel) {
 		this.aListnerers.add(paMel);
 	}
-	
+
 	public void removeExecutionListnerer(MethodExecuteListnerer paMel) {
 		this.aListnerers.remove(paMel);
 	}
-	
+
 }

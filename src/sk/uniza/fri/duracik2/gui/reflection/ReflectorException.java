@@ -18,7 +18,5 @@ public class ReflectorException extends RuntimeException {
 	public ReflectorException(String paMessage, Throwable paCause) {
 		super(paMessage, paCause);
 	}
-	
-	
-	
+
 }

@@ -179,8 +179,8 @@ public class ExportnySystem {
 		}
 		Velkosklad sklad = (Velkosklad) tovar.getPosExpZaznam().getZdroj();
 		AMiesto ciel = tovar.getPosExpZaznam().getCiel();
-		while (ciel instanceof Velkosklad && !((Velkosklad)ciel).isValid()) {
-			ciel = ((Velkosklad)ciel).getNahrada();
+		while (ciel instanceof Velkosklad && !((Velkosklad) ciel).isValid()) {
+			ciel = ((Velkosklad) ciel).getNahrada();
 			tovar.getPosExpZaznam().setCiel(ciel);
 		}
 		//Už je vyložený
@@ -453,8 +453,8 @@ public class ExportnySystem {
 			else {
 				//Ak je tovar tam, kde by mal byť podla poslednej expedicie
 				AMiesto ciel = tovar.getPosExpZaznam().getCiel();
-				while (ciel instanceof Velkosklad && !((Velkosklad)ciel).isValid()) {
-					ciel = ((Velkosklad)ciel).getNahrada();
+				while (ciel instanceof Velkosklad && !((Velkosklad) ciel).isValid()) {
+					ciel = ((Velkosklad) ciel).getNahrada();
 				}
 				if (tovar.getPosExpZaznam().getCiel() == tovar.getAktualnaLokacia()) {
 					tovar.getAktualnaLokacia().naskladniTovar(tovar.getPosExpZaznam());

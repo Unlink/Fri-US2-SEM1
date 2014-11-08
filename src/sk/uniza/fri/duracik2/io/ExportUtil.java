@@ -14,10 +14,10 @@ import java.util.Date;
  * @author Unlink
  */
 public class ExportUtil {
-
+	
 	private SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 	private static ExportUtil aInstance;
-
+	
 	public static ExportUtil getInstance() {
 		synchronized (ExportUtil.class) {
 			if (aInstance == null) {
@@ -26,7 +26,7 @@ public class ExportUtil {
 			return aInstance;
 		}
 	}
-
+	
 	private ExportUtil() {
 	}
 	
@@ -35,11 +35,12 @@ public class ExportUtil {
 	}
 	
 	public Date convertDate(String date) {
-        try {
-            return DATE_FORMAT.parse(date);
-        } catch (ParseException ex) {
-            return null;
-        }
-    }
+		try {
+			return DATE_FORMAT.parse(date);
+		}
+		catch (ParseException ex) {
+			return null;
+		}
+	}
 	
 }

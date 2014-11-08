@@ -10,16 +10,16 @@ package sk.uniza.fri.duracik2.io;
  * @author Unlink
  */
 public enum EObjectType {
-    TOVAR("tovary.csv"), SKLAD("sklady.csv"), ODBERATEL("odberatelia.csv"), EXPEDICIA("expedicie.csv");
-    
-    private final String aFilename;
-    EObjectType(String paFilename) {
-        this.aFilename = paFilename;
-    }
+	TOVAR("tovary.csv"), SKLAD("sklady.csv"), ODBERATEL("odberatelia.csv"), EXPEDICIA("expedicie.csv");
 
-    public String getFilename() {
-        return aFilename;
-    }
-    
-    
+	private final String aFilename;
+
+	private EObjectType(String paFilename) {
+		this.aFilename = paFilename;
+	}
+
+	public String getFilename() {
+		return aFilename;
+	}
+
 }

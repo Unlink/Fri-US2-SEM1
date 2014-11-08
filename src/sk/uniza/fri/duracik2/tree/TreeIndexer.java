@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package sk.uniza.fri.duracik2.tree;
 
 /**
  *
  * @author Unlink
- * @param <T> 
+ * @param <T>
  */
 public interface TreeIndexer<T extends Comparable> {
-    public int compare(T e1, Object... params);    
+	public int compare(T e1, Object... params);
 }
