@@ -9,8 +9,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import sk.uniza.fri.duracik2.exportnySystem.Expedicia;
 import sk.uniza.fri.duracik2.exportnySystem.Odberatel;
 import sk.uniza.fri.duracik2.exportnySystem.Tovar;
@@ -63,12 +61,12 @@ public class Importer {
     
     public boolean importuj() {
         BufferedReader br = null;
-        String line;;
+        String line;
         try {
             //Import Velkoskladov
             br = new BufferedReader(new FileReader(new File(aInputDirectory, EObjectType.SKLAD.getFilename())));
             while ((line = br.readLine()) != null) {
-                String[] atrrs = line.split(",");
+                String[] atrrs = line.split(Exporter.COMMA);
                 Integer key = Velkosklad.getKey(atrrs);
                 Velkosklad sklad = getVelkosklad(key);
                 sklad.fromCSV(this, atrrs);
@@ -77,7 +75,7 @@ public class Importer {
             //Import Odberatelov
             br = new BufferedReader(new FileReader(new File(aInputDirectory, EObjectType.ODBERATEL.getFilename())));
             while ((line = br.readLine()) != null) {
-                String[] atrrs = line.split(",");
+                String[] atrrs = line.split(Exporter.COMMA);
                 String key = Odberatel.getKey(atrrs);
                 Odberatel odberatel = getOrberatel(key);
                 odberatel.fromCSV(this, atrrs);
@@ -86,7 +84,7 @@ public class Importer {
             //Import Tovarov
             br = new BufferedReader(new FileReader(new File(aInputDirectory, EObjectType.TOVAR.getFilename())));
             while ((line = br.readLine()) != null) {
-                String[] atrrs = line.split(",");
+                String[] atrrs = line.split(Exporter.COMMA);
                 Long key = Tovar.getKey(atrrs);
                 Tovar tovar = getTovar(key);
                 tovar.fromCSV(this, atrrs);
@@ -95,7 +93,7 @@ public class Importer {
             //Import Tovarov
             br = new BufferedReader(new FileReader(new File(aInputDirectory, EObjectType.EXPEDICIA.getFilename())));
             while ((line = br.readLine()) != null) {
-                String[] atrrs = line.split(",");
+                String[] atrrs = line.split(Exporter.COMMA);
                 Long key = Expedicia.getKey(atrrs);
                 Expedicia expedicia = getExpedicia(key);
                 expedicia.fromCSV(this, atrrs);

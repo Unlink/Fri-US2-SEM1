@@ -337,10 +337,15 @@ public class ExportnySystem {
 			throw new IllegalArgumentException("Nepodarilo sa nájsť tovar s ID " + idTovaru);
 		}
 		AMiesto lokacia = tovar.getAktualnaLokacia();
-		if (lokacia instanceof Velkosklad) {
+		if (lokacia == null) {
+			throw new IllegalArgumentException("Tovar je už vyradený");
+		}
+		else if (lokacia instanceof Velkosklad) {
 			return ((Velkosklad) lokacia).vyradTovar(tovar);
 		}
-		return false;
+		else {
+			throw new IllegalArgumentException("Tovar je už u zákazníka");
+		}
 	}
 
 	/**
@@ -447,9 +452,14 @@ public class ExportnySystem {
 			}
 			else {
 				//Ak je tovar tam, kde by mal byť podla poslednej expedicie
+				AMiesto ciel = tovar.getPosExpZaznam().getCiel();
+				while (ciel instanceof Velkosklad && !((Velkosklad)ciel).isValid()) {
+					ciel = ((Velkosklad)ciel).getNahrada();
+				}
 				if (tovar.getPosExpZaznam().getCiel() == tovar.getAktualnaLokacia()) {
 					tovar.getAktualnaLokacia().naskladniTovar(tovar.getPosExpZaznam());
 				}
+				//Tovar je ešte v zdroji expedovania
 				else if (tovar.getPosExpZaznam().getZdroj() == tovar.getAktualnaLokacia()) {
 					((Velkosklad) tovar.getAktualnaLokacia()).vlozExpedicnyZaznam(tovar.getPosExpZaznam());
 				}
