@@ -253,6 +253,7 @@ public abstract class AbstractSearchTree<E extends Comparable<? super E>> implem
 		}
 
 		Node begin = findLower(pFrom);
+		begin = (begin == null && aLastTraversedDirection < 0) ? aLastUsedNode : begin;
 		begin = (begin == null) ? inOrderSuccessor(aLastUsedNode) : begin;
 
 		final Node clousure = begin;
