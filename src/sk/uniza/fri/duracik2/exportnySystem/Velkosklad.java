@@ -123,7 +123,7 @@ public class Velkosklad extends AMiesto implements IToCSV {
 	public boolean exportujTovar(long paIdTovaru, AMiesto ciel, Date datumPrichodu, String evcVozidla) {
 		Tovar tovar = aTovaryById.findByParams(paIdTovaru);
 		if (tovar == null) {
-			throw new IllegalArgumentException("Tovar s ID " + paIdTovaru + " sa v sklade nenachádza00");
+			throw new IllegalArgumentException("Tovar s ID " + paIdTovaru + " sa v sklade nenachádza");
 		}
 		Expedicia expZaznam = new Expedicia(tovar, evcVozidla, new Date(), datumPrichodu, tovar.getPosExpZaznam(), this, ciel);
 		tovar.setPosExpZaznam(expZaznam);
@@ -175,10 +175,15 @@ public class Velkosklad extends AMiesto implements IToCSV {
 	}
 
 	public boolean vyradTovar(Tovar paTovar) {
-		aTovaryByDatum.delete(paTovar);
-		aTovaryByEan.delete(paTovar);
-		aTovaryById.delete(paTovar);
-		aExpedovane.delete(paTovar.getPosExpZaznam());
+		if (paTovar.getPosExpZaznam() != null && aExpedovane.contains(paTovar.getPosExpZaznam())) {
+			aExpedovane.delete(paTovar.getPosExpZaznam());
+			paTovar.setPosExpZaznam(paTovar.getPosExpZaznam().getPredchadzajuca());
+		}
+		else {
+			aTovaryByDatum.delete(paTovar);
+			aTovaryByEan.delete(paTovar);
+			aTovaryById.delete(paTovar);
+		}
 		paTovar.setAktualnaLokacia(null);
 		return true;
 	}

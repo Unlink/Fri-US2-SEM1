@@ -45,7 +45,7 @@ public class Generator {
 					if (rg.nextDouble() < 0.5) {
 						List<Odberatel> os = sys.vypisOdberatelovSkladu(idSkladu);
 						Odberatel o = os.get(randomBetween(0, Math.max(0, os.size() - 1)));
-						sys.expedujTovarKOdberatelovi(idSkladu, t.getVyrobneCislo(), o.getId(), randomDate(t.getDatumVyroby().getTime(), t.getDatumSpotreby().getTime()), randomString(2) + " " + randomString(3) + " " + randomString(2));
+						sys.expedujTovarKOdberatelovi(t.getVyrobneCislo(), o.getId(), randomDate(t.getDatumVyroby().getTime(), t.getDatumSpotreby().getTime()), randomString(2) + " " + randomString(3) + " " + randomString(2));
 						if (rg.nextDouble() < 0.5) {
 							sys.vylozTovar(t.getVyrobneCislo());
 						}
@@ -53,7 +53,7 @@ public class Generator {
 					}
 					else {
 						int sklad = randomBetweenAndNot(0, Math.max(0, pocetSkladov - 1), idSkladu);
-						sys.expedujTovarDoVelkoskladu(idSkladu, t.getVyrobneCislo(), sklad, randomDate(t.getDatumVyroby().getTime(), t.getDatumSpotreby().getTime()), randomString(2) + " " + randomString(3) + " " + randomString(2));
+						sys.expedujTovarDoVelkoskladu(t.getVyrobneCislo(), sklad, randomDate(t.getDatumVyroby().getTime(), t.getDatumSpotreby().getTime()), randomString(2) + " " + randomString(3) + " " + randomString(2));
 						if (rg.nextDouble() < 0.5) {
 							sys.vylozTovar(t.getVyrobneCislo());
 						}

@@ -31,36 +31,19 @@ public class FileComponentField extends javax.swing.JPanel {
 	}
 
 	private void loadFileChooser(final Field paField) {
-		new SwingWorker<JFileChooser, Object>() {
-			@Override
-			protected JFileChooser doInBackground() throws Exception {
-
-				JFileChooser jfc = new JFileChooser();
-				if (paField.hasParam("JFileChooser.type")) {
-					jfc.setDialogType(paField.getParam("JFileChooser.type").intValue());
-				}
-				if (paField.hasParam("JFileChooser.fileSelectionMode")) {
-					jfc.setFileSelectionMode(paField.getParam("JFileChooser.fileSelectionMode").intValue());
-					if (paField.getParam("JFileChooser.fileSelectionMode").intValue() == JFileChooser.DIRECTORIES_ONLY) {
-						jfc.setDialogTitle("Vyber zložku");
-					}
-					else {
-						jfc.setDialogTitle("Vyber súbor");
-					}
-				}
-				return jfc;
+		aFileChooser = new JFileChooser();
+		if (paField.hasParam("JFileChooser.type")) {
+			aFileChooser.setDialogType(paField.getParam("JFileChooser.type").intValue());
+		}
+		if (paField.hasParam("JFileChooser.fileSelectionMode")) {
+			aFileChooser.setFileSelectionMode(paField.getParam("JFileChooser.fileSelectionMode").intValue());
+			if (paField.getParam("JFileChooser.fileSelectionMode").intValue() == JFileChooser.DIRECTORIES_ONLY) {
+				aFileChooser.setDialogTitle("Vyber zložku");
 			}
-
-			@Override
-			protected void done() {
-				try {
-					aFileChooser = get();
-				}
-				catch (InterruptedException | ExecutionException ex) {
-					ex.printStackTrace();
-				}
+			else {
+				aFileChooser.setDialogTitle("Vyber súbor");
 			}
-		}.execute();
+		}
 	}
 
 	/**

@@ -131,16 +131,15 @@ public class ExportnySystem {
 	 * výrobným kódom) do iného veľkoskladu (identifikovaný svojim
 	 * identifikátorom)
 	 *
-	 * @param idSkladu
 	 * @param idTovaru
 	 * @param idCielovehoSkladu
 	 * @param datumPrichodu
 	 * @param evcVozidla
 	 * @return
 	 */
-	@Funkcia(id = 6, parametre = {"Identifikátor skladu", "Výrobné číslo tovaru", "Identifikátor cieľového skladu", "Ocakávaný dátum príchodu", "Evidenčné číslo prepravcu"})
-	public boolean expedujTovarDoVelkoskladu(int idSkladu, long idTovaru, int idCielovehoSkladu, Date datumPrichodu, String evcVozidla) {
-		Velkosklad sklad = vyhladajSklad(idSkladu);
+	@Funkcia(id = 6, parametre = {"Výrobné číslo tovaru", "Identifikátor cieľového skladu", "Ocakávaný dátum príchodu", "Evidenčné číslo prepravcu"})
+	public boolean expedujTovarDoVelkoskladu(long idTovaru, int idCielovehoSkladu, Date datumPrichodu, String evcVozidla) {
+		Velkosklad sklad = vyhladajSklad(idTovaru);
 		Velkosklad cielovySklad = vyhladajSklad(idCielovehoSkladu);
 		return sklad.exportujTovar(idTovaru, cielovySklad, datumPrichodu, evcVozidla);
 	}
@@ -149,16 +148,15 @@ public class ExportnySystem {
 	 * 7 vykonanie záznamu o začiatku expedovania daného tovaru (identifikovaný
 	 * výrobným kódom) k odberateľovi (identifikovaný svojim identifikátorom)
 	 *
-	 * @param idSkladu
 	 * @param idTovaru
 	 * @param idOdberatela
 	 * @param datumPrichodu
 	 * @param evcVozidla
 	 * @return
 	 */
-	@Funkcia(id = 7, parametre = {"Identifikátor skladu", "Výrobné číslo tovaru", "Identifikátor odberaťela", "Ocakávaný dátum príchodu", "Evidenčné číslo prepravcu"})
-	public boolean expedujTovarKOdberatelovi(int idSkladu, long idTovaru, String idOdberatela, Date datumPrichodu, String evcVozidla) {
-		Velkosklad sklad = vyhladajSklad(idSkladu);
+	@Funkcia(id = 7, parametre = {"Výrobné číslo tovaru", "Identifikátor odberaťela", "Ocakávaný dátum príchodu", "Evidenčné číslo prepravcu"})
+	public boolean expedujTovarKOdberatelovi(long idTovaru, String idOdberatela, Date datumPrichodu, String evcVozidla) {
+		Velkosklad sklad = vyhladajSklad(idTovaru);
 
 		return sklad.exportujTovarKOdberatelovi(idTovaru, idOdberatela, datumPrichodu, evcVozidla);
 	}
@@ -283,12 +281,15 @@ public class ExportnySystem {
 	 *
 	 * @param idSkladu
 	 * @param datSpotreby
+	 * @param pocDni
 	 * @return
 	 */
-	@Funkcia(id = 13, parametre = {"Identifikátor skladu", "Dátum spotreby"})
-	public List<Tovar> vypisTovarovSDatumomSpotreby(int idSkladu, Date datSpotreby) {
+	@Funkcia(id = 13, parametre = {"Identifikátor skladu", "Dátum spotreby", "Počet dní"})
+	@FunkciaParametre(parametre = {
+		@FunkciaParameter(param = 2, key = BasicFormFields.DEFAULT, value = "5")})
+	public List<Tovar> vypisTovarovSDatumomSpotreby(int idSkladu, Date datSpotreby, int pocDni) {
 		Velkosklad sklad = vyhladajSklad(idSkladu);
-
+		datSpotreby = new Date(datSpotreby.getTime() + pocDni * 60 * 60 * 24 * 1000L);
 		return sklad.vyhladajPodlaDatumuSpotreby(datSpotreby);
 	}
 
@@ -412,6 +413,19 @@ public class ExportnySystem {
 			throw new IllegalArgumentException("Nepodarilo sa nájsť sklad s ID " + idSkladu);
 		}
 		return sklad;
+	}
+
+	private Velkosklad vyhladajSklad(long idTovaru) {
+		Tovar tovar = aZoznamTovarov.findByParams(idTovaru);
+		if (tovar == null) {
+			throw new IllegalArgumentException("Nepodarilo sa nájsť tovar s ID " + idTovaru);
+		}
+		if (tovar.getAktualnaLokacia() instanceof Velkosklad) {
+			return (Velkosklad) tovar.getAktualnaLokacia();
+		}
+		else {
+			throw new IllegalArgumentException("Tovar nieje na veľkosklade");
+		}
 	}
 
 	@Funkcia(parametre = {"Zložka s dátami"})

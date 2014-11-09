@@ -65,11 +65,11 @@ public class Main {
         s.naskladniTovar(new Tovar(5L, "BB", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
         s.naskladniTovar(new Tovar(6L, "CC", STD("18.10.2014"), STD("18.12.2014"), 100), 4);
         
-        s.expedujTovarDoVelkoskladu(1, 1, 3, STD("20.10.2014"), "EVC1");
+        s.expedujTovarDoVelkoskladu(1, 3, STD("20.10.2014"), "EVC1");
         s.vylozTovar(1);
-        s.expedujTovarDoVelkoskladu(3, 1, 2, STD("15.10.2014"), "EVC2");
+        s.expedujTovarDoVelkoskladu(1, 2, STD("15.10.2014"), "EVC2");
         s.vylozTovar(1);
-        s.expedujTovarKOdberatelovi(2, 1, "3", STD("15.10.2014"), "EVC3");
+        s.expedujTovarKOdberatelovi(1, "3", STD("15.10.2014"), "EVC3");
         s.vylozTovar(1);
         s.zrusOdberatela(2, "3");
         s.zrusVelkosklad(3, 4);
